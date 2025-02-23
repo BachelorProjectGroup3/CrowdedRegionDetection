@@ -26,4 +26,4 @@ jobs:
            ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
       - name: Connect
         run: |
-          ssh -i ~/.ssh/id_rsa ubuntu@10.92.1.153
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@{{ secrets.SSH_HOST}}
