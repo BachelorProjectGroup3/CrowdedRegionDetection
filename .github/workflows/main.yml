@@ -15,12 +15,27 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H "${{ secrets.SSH_HOST }}" > ~/.ssh/known-hosts
-          echo "Does this run?"
+          ls -lah ~/.ssh  # Debugging output
+          cat ~/.ssh/known-hosts  # Debugging output
+          echo "SSH keys installed successfully"
+
+      - name: Debug SSH Connection
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" "echo 'SSH Connection Successful'"
+
+      - name: Debug Environment Variables
+        run: |
+          echo "SSH_USER=${{ secrets.SSH_USER }}"
+          echo "SSH_HOST=${{ secrets.SSH_HOST }}"
+          echo "WORK_CIR=${{ secrets.WORK_CIR }}"
 
       - name: Connect and pull
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
-          "cd '${{ secrets.WORK_CIR }}' && git checkout '${{ secrets.MAIN_BRANCH }}' && git pull"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" << 'EOF'
+          cd "${{ secrets.WORK_CIR }}"
+          git checkout "${{ secrets.MAIN_BRANCH }}"
+          git pull
+          EOF
 
       - name: Cleanup
         run: rm -rf ~/.ssh
