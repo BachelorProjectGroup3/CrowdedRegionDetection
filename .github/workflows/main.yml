@@ -9,14 +9,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: install ssh keys
+      - name: Install SSH keys
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "${{ secrets.SSH_HOST }}" > ~/.ssh/known-hosts
+          echo "Does this run?"
 
-      run: |
-        install -m 600 -D /dev/null ~/.ssh/id_rsa
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known-hosts
-        echo "Does this run?"
-    - name: connect and pull
-      run: ssh ${{ secrets.SSH_USER}}@${{secrets.SSH_HOST}} "cd ${{ secrets.WORK_CIR}} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull"
-    - name: cleanup
-      run: rm -rf ~/.ssh
+      - name: Connect and pull
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+          "cd '${{ secrets.WORK_CIR }}' && git checkout '${{ secrets.MAIN_BRANCH }}' && git pull"
+
+      - name: Cleanup
+        run: rm -rf ~/.ssh
