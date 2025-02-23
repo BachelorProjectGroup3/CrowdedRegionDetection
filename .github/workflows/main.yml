@@ -24,3 +24,6 @@ jobs:
       - name: Add SSH Host Key
         run: |
            ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Connect
+        run: |
+          ssh -i ~/.ssh/id_rsa ubuntu@10.92.1.153
