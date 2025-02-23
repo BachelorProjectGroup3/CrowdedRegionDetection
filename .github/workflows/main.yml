@@ -5,13 +5,20 @@ on:
 
 jobs:
   run_pull:
-    name: run pull
     runs-on: self-hosted
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
 
-      - name: SSH to private server and pull code
+    steps:
+      - name: Install SSH keys
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'cd ~/CrowdedRegionControl && git pull'
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Add SSH Host Key
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Test SSH Connection
+        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Connection Successful!"'
+
+      - name: Cleanup
+        run: rm -rf ~/.ssh
