@@ -13,12 +13,6 @@ jobs:
           echo "SSH_HOST: ${{ secrets.SSH_HOST }} test"
           echo "SSH_PASSWORD (first 100 chars): $(echo "${{ secrets.SSH_PASSWORD }}" | cut -c1-100)"
 
-      - name: Check SSH tools
-        run: |
-          which ssh
-          which ssh-keygen
-          which sshpass  # Ensure sshpass is installed
-
       - name: Install sshpass
         run: |
           sudo apt-get update
