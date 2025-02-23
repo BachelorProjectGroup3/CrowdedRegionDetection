@@ -11,10 +11,11 @@ jobs:
     steps:
       - name: Install SSH keys
         run: |
+          mkdir -p ~/.ssh  # Make sure the .ssh directory exists
           install -m 600 -D /dev/null ~/.ssh/id_rsa
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
-          cat ~/.ssh/known_hosts  # Debug output to verify the key is added
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          ssh-keyscan -t rsa ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+          cat ~/.ssh/known_hosts  # Debug output to verify the key is added
       - name: Connect and pull
         run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST}}
       - name: Cleanup
