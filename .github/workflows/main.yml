@@ -11,19 +11,34 @@ jobs:
         run: |
           echo "SSH_USER: ${{ secrets.SSH_USER }}"
           echo "SSH_HOST: ${{ secrets.SSH_HOST }} test"
-          echo "SSH_PRIVATE_KEY (first 100 chars): ${{ secrets.SSH_PRIVATE_KEY }}"
+          echo "SSH_PRIVATE_KEY (first 100 chars): $(echo "${{ secrets.SSH_PRIVATE_KEY }}" | cut -c1-100)"
+          
       - name: Check SSH tools
         run: |
           which ssh
           which ssh-keygen
+
       - name: Install SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+
+      - name: Set SSH Key Permissions
+        run: |
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/id_rsa
+          chmod 644 ~/.ssh/known_hosts
+
       - name: Add SSH Host Key
         run: |
-           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-      - name: Connect
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Start SSH Agent
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST}}
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+
+      - name: Test SSH Connection
+        run: |
+          ssh -vvv -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo 'SSH Connection Successful'"
