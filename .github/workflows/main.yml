@@ -16,6 +16,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -t rsa ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
           cat ~/.ssh/known_hosts  # Debug output to verify the key is added
-
+      - name: Connect and pull
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST}}
       - name: Cleanup
         run: rm -rf ~/.ssh
