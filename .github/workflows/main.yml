@@ -26,5 +26,5 @@ jobs:
 
       - name: Connect
         run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
           echo "SSH connection finished!"
