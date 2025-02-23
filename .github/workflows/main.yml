@@ -11,7 +11,7 @@ jobs:
         run: |
           echo "SSH_USER: ${{ secrets.SSH_USER }}"
           echo "SSH_HOST: ${{ secrets.SSH_HOST }}"
-          echo "SSH_PRIVATE_KEY (first 100 chars): ${{ secrets.SSH_PRIVATE_KEY | truncate 100 }}"
+          echo "SSH_PRIVATE_KEY (first 100 chars): ${{ secrets.SSH_PRIVATE_KEY }}"
       - name: Check SSH tools
         run: |
           which ssh
