@@ -14,7 +14,6 @@ jobs:
           mkdir -p ~/.ssh  # Make sure the .ssh directory exists
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          cat ~/.ssh/known_hosts  # Debug output to verify the key is added
       - name: Connect and pull
         run: ssh -i ~/.ssh/id_rsa -v ${{ secrets.SSH_USER}}@${{ secrets.SSH_HOST }} 'echo "Connection Test Successful"'
       - name: Cleanup
