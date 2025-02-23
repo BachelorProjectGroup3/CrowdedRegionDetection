@@ -12,22 +12,23 @@ jobs:
       - name: Install SSH keys
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H "${{ secrets.SSH_HOST }}" > ~/.ssh/known-hosts
-          ls -lah ~/.ssh  # Debugging output
-          cat ~/.ssh/known-hosts  # Debugging output
           echo "SSH keys installed successfully"
 
-      - name: Debug SSH Connection
+      - name: Debug SSH Key
+        run: |
+          echo "SSH Key Length:"
+          wc -c < ~/.ssh/id_rsa
+          echo "First few lines:"
+          head -n 5 ~/.ssh/id_rsa
+          echo "Last few lines:"
+          tail -n 5 ~/.ssh/id_rsa
+
+      - name: Test SSH Connection
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" "echo 'SSH Connection Successful'"
-
-      - name: Debug Environment Variables
-        run: |
-          echo "SSH_USER=${{ secrets.SSH_USER }}"
-          echo "SSH_HOST=${{ secrets.SSH_HOST }}"
-          echo "WORK_CIR=${{ secrets.WORK_CIR }}"
 
       - name: Connect and pull
         run: |
