@@ -26,4 +26,4 @@ jobs:
 
       - name: Connect
         run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh ${{ secrets.USER }}@${{ secrets.HOST }}
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER}}@{{ secrets.SSH_HOST }}
