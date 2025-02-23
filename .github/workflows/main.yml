@@ -11,34 +11,26 @@ jobs:
         run: |
           echo "SSH_USER: ${{ secrets.SSH_USER }}"
           echo "SSH_HOST: ${{ secrets.SSH_HOST }} test"
-          echo "SSH_PRIVATE_KEY (first 100 chars): $(echo "${{ secrets.SSH_PRIVATE_KEY }}" | cut -c1-100)"
-          
+          echo "SSH_PASSWORD (first 100 chars): $(echo "${{ secrets.SSH_PASSWORD }}" | cut -c1-100)"
+
       - name: Check SSH tools
         run: |
           which ssh
           which ssh-keygen
+          which sshpass  # Ensure sshpass is installed
 
-      - name: Install SSH key
+      - name: Install sshpass
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass  # Install sshpass if not available
+
+      - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
-      - name: Set SSH Key Permissions
-        run: |
           chmod 700 ~/.ssh
-          chmod 600 ~/.ssh/id_rsa
-          chmod 644 ~/.ssh/known_hosts
-
-      - name: Add SSH Host Key
-        run: |
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Start SSH Agent
+      - name: Test SSH Connection using Password
         run: |
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
-
-      - name: Test SSH Connection
-        run: |
-          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no -p 22 ${{ secrets.USER}}@${{ secrets.HOST }}
+          # Using sshpass for password-based authentication
+          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no -p 22 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo 'SSH Connection Successful'"
