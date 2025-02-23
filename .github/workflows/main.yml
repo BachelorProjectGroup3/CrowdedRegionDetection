@@ -4,24 +4,26 @@ on:
       - main
 
 jobs:
-  run_pull:
+  test_ssh:
     runs-on: self-hosted
-
     steps:
-      - name: Install SSH keys
+      - name: Debug secrets
+        run: |
+          echo "SSH_USER: ${{ secrets.SSH_USER }}"
+          echo "SSH_HOST: ${{ secrets.SSH_HOST }}"
+          echo "SSH_PRIVATE_KEY (first 100 chars): ${{ secrets.SSH_PRIVATE_KEY | truncate 100 }}"
+      - name: Check SSH tools
+        run: |
+          which ssh
+          which ssh-keygen
+      - name: Install SSH key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa  # Ensure private key permissions are correct
-          chmod 700 ~/.ssh  # Ensure the .ssh directory has the correct permissions
-
+          chmod 600 ~/.ssh/id_rsa
       - name: Add SSH Host Key
         run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Test SSH Connection
-        run: ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Connection Successful!"'
-
-      - name: Cleanup
-        run: rm -rf ~/.ssh
+           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Run SSH command
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Hello from GitHub Actions!"'
