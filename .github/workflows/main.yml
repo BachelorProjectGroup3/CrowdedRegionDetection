@@ -37,13 +37,10 @@ jobs:
         run: |
           pwd
           ls -la
-          cd /home/ubuntu/CrowdedRegionControl && git pull
-          cd /home/ubuntu/CrowdedBackend/CrowdedBackend && dotnet build && dotnet ef database update --verbose
-
-  deploy:
-    runs-on: self-hosted
-    needs: [connect_with_ssh, building]
-    steps:
-      - name: deploy
-        run: deploy run
+          cd /home/ubuntu/CrowdedRegionControl
+          pwd
+          ls -la
+          cd /home/ubuntu/CrowdedBackend/CrowdedBackend
+          pwd
+          ls -la
     
