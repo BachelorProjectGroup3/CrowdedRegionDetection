@@ -34,7 +34,7 @@ jobs:
     needs: connect_with_ssh
     steps:
       - name: Pull & build
-      - run: |
+        run: |
           cd /CrowdedRegionControl && git pull
           cd /CrowdedBackend/CrowdedBackend && dotnet build && dotnet ef database update --verbose
 
