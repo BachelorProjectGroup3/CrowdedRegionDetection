@@ -35,8 +35,8 @@ jobs:
     steps:
       - name: Pull & build
         run: |
-          cd /../../../CrowdedRegionControl && git pull
-          cd /../../../CrowdedBackend/CrowdedBackend && dotnet build && dotnet ef database update --verbose
+          cd ../../../CrowdedRegionControl && git pull
+          cd ../../../CrowdedBackend/CrowdedBackend && dotnet build && dotnet ef database update --verbose
 
   deploy:
     runs-on: self-hosted
