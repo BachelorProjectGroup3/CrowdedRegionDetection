@@ -33,12 +33,15 @@ jobs:
     runs-on: self-hosted
     needs: connect_with_ssh
     steps:
-      - name: "cd /CrowdedRegionControl && git pull"
-      - name: "cd /CrowdedBackend/CrowdedBackend && dotnet build && dotnet ef database update --verbose"
+      - name: Pull & build
+      - run: |
+          "cd /CrowdedRegionControl && git pull"
+          "cd /CrowdedBackend/CrowdedBackend && dotnet build && dotnet ef database update --verbose"
 
   deploy:
     runs-on: self-hosted
     needs: [connect_with_ssh, building]
     steps:
-      - name: "dotnet run"
+      - name: deploy
+        run: "deploy run"
     
