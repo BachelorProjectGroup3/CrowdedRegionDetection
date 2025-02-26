@@ -4,7 +4,7 @@ on:
       - main
 
 jobs:
-  test_ssh:
+  connect_with_ssh:
     runs-on: self-hosted
     steps:
       - name: Debug secrets
@@ -28,3 +28,17 @@ jobs:
         run: |
           sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
           echo "SSH connection finished!"
+
+  building:
+    runs-on: self-hosted
+    needs: connect_with_ssh
+    steps:
+      - name: "cd /CrowdedRegionControl && git pull"
+      - name: "cd /CrowdedBackend/CrowdedBackend && dotnet build && dotnet ef database update --verbose"
+
+  deploy:
+    runs-on: self-hosted
+    needs: [connect_with_ssh, building]
+    steps:
+      - name: "dotnet run"
+    
