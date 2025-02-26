@@ -43,4 +43,4 @@ jobs:
     needs: [connect_with_ssh, building]
     steps:
       - name: deploy
-        run: cd ~/CrowdedRegionControl/CrowdedBackend/CrowdedBackend && deploy run
+        run: cd ~/CrowdedRegionControl/CrowdedBackend/CrowdedBackend && dotnet run
