@@ -35,12 +35,12 @@ jobs:
     steps:
       - name: Pull & build
         run: |
-          pwd
-          ls -la
-          cd ~/CrowdedRegionControl
-          pwd
-          ls -la
-          cd ~/CrowdedRegionControl/CrowdedBackend/CrowdedBackend
-          pwd
-          ls -la
-    
+          cd ~/CrowdedRegionControl && git pull
+          cd ~/CrowdedRegionControl/CrowdedBackend/CrowdedBackend && dotnet build && dotnet ef database update --verbose
+
+  deploy:
+    runs-on: self-hosted
+    needs: [connect_with_ssh, building]
+    steps:
+      - name: deploy
+        run: deploy run
