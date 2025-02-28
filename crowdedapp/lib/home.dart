@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key, required this.title, required this.baseTheme});
-
   final String title;
-  final ThemeData baseTheme;
+  
+  const Home({super.key, required this.title});
 
   @override
   State<Home> createState() => _HomeState();
@@ -16,8 +15,8 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        backgroundColor: widget.baseTheme.primaryColor,
-      ),
+        backgroundColor: Theme.of(context).colorScheme.tertiary,
+      )
     );
   }
 }

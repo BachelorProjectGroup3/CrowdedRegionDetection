@@ -12,8 +12,15 @@ class _CrowdedappState extends State<Crowdedapp> {
   final String titleString = "Crowded Region Detection";
 
   final ThemeData baseTheme = ThemeData(
-    primaryColor: const Color.fromARGB(183, 255, 218, 84),
-    scaffoldBackgroundColor: const Color.fromARGB(255, 255, 234, 159)
+    primaryColor: const Color.fromARGB(255, 4, 0, 255),
+    scaffoldBackgroundColor: const Color.fromARGB(255, 255, 0, 0),
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: const Color.fromARGB(255, 21, 252, 0),
+      primary: const Color.fromARGB(255, 4, 0, 255),
+      secondary: const Color.fromARGB(255, 255, 0, 0),
+      tertiary: const Color.fromARGB(255, 0, 255, 0),
+    ),
+
   );
 
   @override
@@ -21,7 +28,7 @@ class _CrowdedappState extends State<Crowdedapp> {
     return MaterialApp(
       title: titleString,
       theme: baseTheme,
-      home: Home(title: titleString, baseTheme: baseTheme),
+      home: Home(title: titleString),
       );
   }
 }
