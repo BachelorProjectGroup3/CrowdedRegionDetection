@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CrowdedBackend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f52a71d8473771ee0dc74644dbeaa428b00aa15e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+33ee8a855532e3e2fd951aa9f3514a28b833ff45")]
 [assembly: System.Reflection.AssemblyProductAttribute("CrowdedBackend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CrowdedBackend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
