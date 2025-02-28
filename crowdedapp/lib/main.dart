@@ -1,7 +1,8 @@
+import 'package:crowdedapp/CrowdedApp.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const Crowdedapp());
 }
 
 class MyApp extends StatelessWidget {
