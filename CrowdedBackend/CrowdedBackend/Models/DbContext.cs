@@ -1,5 +1,6 @@
-using DefaultNamespace;
 using Microsoft.EntityFrameworkCore;
+
+namespace CrowdedBackend.Models;
 
 public class MyDbContext : DbContext
 {

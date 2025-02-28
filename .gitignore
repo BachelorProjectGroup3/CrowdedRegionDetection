@@ -1,2 +1,2 @@
-./CrowdedBackend/.env
-./crowdedapp/.env
+./CrowdedBackend/env
+./crowdedapp/env
