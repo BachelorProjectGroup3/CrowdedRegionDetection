@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Volumes/AAUCode/BAHCELORPROJECT/CrowdedRegionDetection/CrowdedBackend/CrowdedBackend/CrowdedBackend.csproj": {}
+    "/Users/frederiklauridsen/AAU KBH/SW6/Bachelor Project/Project/CrowdedRegionDetection/CrowdedBackend/CrowdedBackend/CrowdedBackend.csproj": {}
   },
   "projects": {
-    "/Volumes/AAUCode/BAHCELORPROJECT/CrowdedRegionDetection/CrowdedBackend/CrowdedBackend/CrowdedBackend.csproj": {
+    "/Users/frederiklauridsen/AAU KBH/SW6/Bachelor Project/Project/CrowdedRegionDetection/CrowdedBackend/CrowdedBackend/CrowdedBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Volumes/AAUCode/BAHCELORPROJECT/CrowdedRegionDetection/CrowdedBackend/CrowdedBackend/CrowdedBackend.csproj",
+        "projectUniqueName": "/Users/frederiklauridsen/AAU KBH/SW6/Bachelor Project/Project/CrowdedRegionDetection/CrowdedBackend/CrowdedBackend/CrowdedBackend.csproj",
         "projectName": "CrowdedBackend",
-        "projectPath": "/Volumes/AAUCode/BAHCELORPROJECT/CrowdedRegionDetection/CrowdedBackend/CrowdedBackend/CrowdedBackend.csproj",
-        "packagesPath": "/Users/penneo/.nuget/packages/",
-        "outputPath": "/Volumes/AAUCode/BAHCELORPROJECT/CrowdedRegionDetection/CrowdedBackend/CrowdedBackend/obj/",
+        "projectPath": "/Users/frederiklauridsen/AAU KBH/SW6/Bachelor Project/Project/CrowdedRegionDetection/CrowdedBackend/CrowdedBackend/CrowdedBackend.csproj",
+        "packagesPath": "/Users/frederiklauridsen/.nuget/packages/",
+        "outputPath": "/Users/frederiklauridsen/AAU KBH/SW6/Bachelor Project/Project/CrowdedRegionDetection/CrowdedBackend/CrowdedBackend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/penneo/.nuget/NuGet/NuGet.Config"
+          "/Users/frederiklauridsen/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
