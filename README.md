@@ -1,5 +1,5 @@
-# Crowded Region Control
-Bachelor project - Crowded region control
+# Crowded Region Detection
+Bachelor project - Crowded Region Detection
 
 
 ## App
