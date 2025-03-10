@@ -43,4 +43,4 @@ jobs:
     needs: [connect_with_ssh, building]
     steps:
       - name: deploy
-        run: cd ~/.runscript.sh
+        run: nohup dotnet ~/CrowdedBackend/CrowdedBackend.dll --urls "http://0.0.0.0:5725" > ~/app.log 2>&1 &  
