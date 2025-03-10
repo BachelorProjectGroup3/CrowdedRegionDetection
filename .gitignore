@@ -1,4 +1,3 @@
 ./CrowdedBackend/env
-./crowdedapp/env
-./CrowdedBackend/CrowdedBackend/obj/
-./CrowdedBackend/CrowdedBackend/bin/
+./crowdedapp/envCrowdedBackend/CrowdedBackend/obj/
+CrowdedBackend/CrowdedBackend/bin/
