@@ -2,5 +2,5 @@
 ./crowdedapp/env
 /CrowdedBackend/CrowdedBackend/obj/
 /CrowdedBackend/CrowdedBackend/bin/
-/CrowdedBackend/.idea
+/CrowdedBackend/.idea/
 /CrowdedBackend/CrowdedBackend/appsettings.json
