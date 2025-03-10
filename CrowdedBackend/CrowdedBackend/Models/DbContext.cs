@@ -8,5 +8,5 @@ public class MyDbContext : DbContext
 
     public DbSet<User> Users { get; set; } // Example entity
 
-    public DbSet<DefaultNamespace.RaspData> RaspData { get; set; } = default!;
+    public DbSet<RaspData> RaspData { get; set; } = default!;
 }
