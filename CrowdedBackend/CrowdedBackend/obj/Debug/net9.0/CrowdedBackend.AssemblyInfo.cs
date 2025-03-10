@@ -13,7 +13,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CrowdedBackend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+abe62844d8f838e2cc05c54a1a8cf4845da85ad0")]
+<<<<<<< Updated upstream
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+329cdc75ece2ae0a5aa5aaedae7927d46d168616")]
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+011e50bdc11c51bd61c56445880129801e3d1687")]
+>>>>>>> Stashed changes
 [assembly: System.Reflection.AssemblyProductAttribute("CrowdedBackend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CrowdedBackend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
