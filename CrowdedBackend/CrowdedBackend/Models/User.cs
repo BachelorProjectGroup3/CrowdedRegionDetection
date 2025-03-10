@@ -1,4 +1,4 @@
-namespace CrowdedBackend.Models;
+namespace DefaultNamespace;
 
 
 public class User
