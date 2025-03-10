@@ -1,4 +1,4 @@
-import 'package:crowdedapp/crowdedApp.dart';
+import 'package:crowdedapp/crowded_app.dart';
 import 'package:flutter/material.dart';
 
 void main() {
