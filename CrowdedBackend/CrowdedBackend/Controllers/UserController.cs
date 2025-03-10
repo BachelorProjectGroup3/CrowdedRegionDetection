@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CrowdedBackend.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DefaultNamespace;
 
 namespace CrowdedBackend.Controllers
 {
@@ -24,6 +24,7 @@ namespace CrowdedBackend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
+            Console.Out.WriteLine("Getting all users");
             return await _context.Users.ToListAsync();
         }
 
@@ -39,6 +40,14 @@ namespace CrowdedBackend.Controllers
             }
 
             return user;
+        }
+        
+        
+        [HttpGet("flop")]
+        public async Task<ActionResult<User>> Flop()
+        {
+            Console.Out.WriteLine("Getting flop users");
+            return null;
         }
 
         // PUT: api/User/5
