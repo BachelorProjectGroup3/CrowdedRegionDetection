@@ -2,3 +2,4 @@
 ./crowdedapp/env
 /CrowdedBackend/CrowdedBackend/obj/
 /CrowdedBackend/CrowdedBackend/bin/
+/CrowdedBackend/.idea
