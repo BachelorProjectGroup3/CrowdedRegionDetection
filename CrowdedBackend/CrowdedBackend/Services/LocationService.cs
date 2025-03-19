@@ -27,20 +27,6 @@ public class LocationService
     private Location getIntersection(List<RaspReading> raspReadings)
     {
         raspReadings = this.normalizeRSSI(raspReadings);
-        // Assuming there are more raspberry Pi's than three
-        var x = 0;
-        var y = 0;
-        foreach (RaspReading raspReading in raspReadings)
-        {
-            int x11 = raspReading.originLocation.x;
-            int y11 = raspReading.originLocation.y;
-            // Find where formula 1 and 2 intersect and plot points into formula 3 to check
-            // Consider adding a margin of error in case of imperfect circles
-            var formula =
-                (Math.Pow(x, 2) - 2 * x * x11 + Math.Pow(x11, 2) + Math.Pow(y, 2) - 2 * y * y11 + Math.Pow(y11, 2)) /
-                Math.Pow(raspReading.distanceInRSSI, 2);
-        }
-        
         
         // Assuming there is an intersection, this can be used. This will probably not work, since there likely is no
         // intersection between the assumed perfect circles
@@ -53,6 +39,44 @@ public class LocationService
         int x3 = raspReadings[2].originLocation.x;
         int y3 = raspReadings[2].originLocation.y;
         int r3 = raspReadings[2].distanceInRSSI;
+        
+        
+        var dx = x2 - x1;
+        var dy = y2 - y1;
+
+        /* Determine the straight-line distance between the centers. */
+        var d = Math.Sqrt((dy*dy) + (dx*dx));
+
+        /* Check for solvability. */
+        if (d > (r1 + r2))
+        {
+            /* no solution. circles do not intersect. */
+            return new Location();
+        }
+        if (d < Math.Abs(r1 - r2))
+        {
+            /* no solution. one circle is contained in the other */
+            return new Location();
+        }
+        
+        
+        
+        // // Assuming there are more raspberry Pi's than three
+        // var x = 0;
+        // var y = 0;
+        // foreach (RaspReading raspReading in raspReadings)
+        // {
+        //     int x11 = raspReading.originLocation.x;
+        //     int y11 = raspReading.originLocation.y;
+        //     // Find where formula 1 and 2 intersect and plot points into formula 3 to check
+        //     // Consider adding a margin of error in case of imperfect circles
+        //     var formula =
+        //         (Math.Pow(x, 2) - 2 * x * x11 + Math.Pow(x11, 2) + Math.Pow(y, 2) - 2 * y * y11 + Math.Pow(y11, 2)) /
+        //         Math.Pow(raspReading.distanceInRSSI, 2);
+        // }
+        
+        
+        
 
         // Compute the numerator and denominator for y
         int numeratorY = (x2 - x3) * ((x2 * x2 - x1 * x1) + (y2 * y2 - y1 * y1) + (r1 * r1 - r2 * r2))
