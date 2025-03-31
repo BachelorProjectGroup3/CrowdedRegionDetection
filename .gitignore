@@ -4,3 +4,6 @@
 /CrowdedBackend/CrowdedBackend/bin/
 /CrowdedBackend/.idea/
 /CrowdedBackend/CrowdedBackend/appsettings.json
+/CrowdedBackend/CrowdedBackend/CrowdedBackend.http
+/CrowdedBackend/CrowdedBackend/Properties/launchSettings.json
+/CrowdedBackend/CrowdedBackend/.config/
