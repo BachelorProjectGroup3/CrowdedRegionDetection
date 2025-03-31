@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CrowdedBackend.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20250310105730_RaspDataMigration")]
+    [Migration("20250331085534_RaspDataMigration")]
     partial class RaspDataMigration
     {
         /// <inheritdoc />
@@ -40,9 +40,8 @@ namespace CrowdedBackend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("signalStrengthRSSI")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("signalStrengthRSSI")
+                        .HasColumnType("integer");
 
                     b.Property<int>("timestamp")
                         .HasColumnType("integer");
@@ -50,31 +49,6 @@ namespace CrowdedBackend.Migrations
                     b.HasKey("id");
 
                     b.ToTable("RaspData");
-                });
-
-            modelBuilder.Entity("CrowdedBackend.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }
