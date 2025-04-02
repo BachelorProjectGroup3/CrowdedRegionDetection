@@ -2,56 +2,56 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CrowdedBackend.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using CrowdedBackend.Models;
 
 namespace CrowdedBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RaspDataController : ControllerBase
+    public class VenueController : ControllerBase
     {
         private readonly MyDbContext _context;
 
-        public RaspDataController(MyDbContext context)
+        public VenueController(MyDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/RaspData
+        // GET: api/Venue
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RaspData>>> GetRaspData()
+        public async Task<ActionResult<IEnumerable<Venue>>> GetVenue()
         {
-            return await _context.RaspData.ToListAsync();
+            return await _context.Venue.ToListAsync();
         }
 
-        // GET: api/RaspData/5
+        // GET: api/Venue/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RaspData>> GetRaspData(int id)
+        public async Task<ActionResult<Venue>> GetVenue(int id)
         {
-            var raspData = await _context.RaspData.FindAsync(id);
+            var venue = await _context.Venue.FindAsync(id);
 
-            if (raspData == null)
+            if (venue == null)
             {
                 return NotFound();
             }
 
-            return raspData;
+            return venue;
         }
 
-        // PUT: api/RaspData/5
+        // PUT: api/Venue/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRaspData(int id, RaspData raspData)
+        public async Task<IActionResult> PutVenue(int id, Venue venue)
         {
-            if (id != raspData.id)
+            if (id != venue.VenueID)
             {
                 return BadRequest();
             }
 
-            _context.Entry(raspData).State = EntityState.Modified;
+            _context.Entry(venue).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace CrowdedBackend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RaspDataExists(id))
+                if (!VenueExists(id))
                 {
                     return NotFound();
                 }
@@ -72,36 +72,36 @@ namespace CrowdedBackend.Controllers
             return NoContent();
         }
 
-        // POST: api/RaspData
+        // POST: api/Venue
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<RaspData>> PostRaspData(RaspData raspData)
+        public async Task<ActionResult<Venue>> PostVenue(Venue venue)
         {
-            _context.RaspData.Add(raspData);
+            _context.Venue.Add(venue);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRaspData", new { id = raspData.id }, raspData);
+            return CreatedAtAction("GetVenue", new { id = venue.VenueID }, venue);
         }
 
-        // DELETE: api/RaspData/5
+        // DELETE: api/Venue/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRaspData(int id)
+        public async Task<IActionResult> DeleteVenue(int id)
         {
-            var raspData = await _context.RaspData.FindAsync(id);
-            if (raspData == null)
+            var venue = await _context.Venue.FindAsync(id);
+            if (venue == null)
             {
                 return NotFound();
             }
 
-            _context.RaspData.Remove(raspData);
+            _context.Venue.Remove(venue);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool RaspDataExists(int id)
+        private bool VenueExists(int id)
         {
-            return _context.RaspData.Any(e => e.id == id);
+            return _context.Venue.Any(e => e.VenueID == id);
         }
     }
 }
