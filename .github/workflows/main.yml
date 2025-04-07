@@ -7,12 +7,6 @@ jobs:
   connect_with_ssh:
     runs-on: self-hosted
     steps:
-      - name: Debug secrets
-        run: |
-          echo "SSH_USER: ${{ secrets.SSH_USER }}"
-          echo "SSH_HOST: ${{ secrets.SSH_HOST }} test"
-          echo "SSH_PASSWORD (first 100 chars): $(echo "${{ secrets.SSH_PASSWORD }}" | cut -c1-100)"
-
       - name: Install sshpass
         run: |
           sudo apt-get update
@@ -43,4 +37,6 @@ jobs:
     needs: [connect_with_ssh, building]
     steps:
       - name: deploy
-        run: nohup dotnet ~/CrowdedBackend/CrowdedBackend.dll --urls "http://0.0.0.0:5725" > ~/app.log 2>&1 &
+        run: |
+          screen -r crowdedRegion
+          cd ~/CrowdedRegionControl/CrowdedBackend/CrowdedBackend && dotnet run
