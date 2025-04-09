@@ -78,7 +78,6 @@ namespace CrowdedBackend.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            // Drop the newly created tables
             migrationBuilder.DropTable(name: "RaspberryPi");
             migrationBuilder.DropTable(name: "DetectedDevice");
             migrationBuilder.DropTable(name: "Venue");
