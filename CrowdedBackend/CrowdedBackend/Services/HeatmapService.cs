@@ -12,9 +12,9 @@ public class HeatmapService
         {
             var heatmapScript = Py.Import("heatmap");
             var originalRaspPositions = new List<List<int>>();
-            originalRaspPositions.Add(new List<int> {8, 2});
-            originalRaspPositions.Add(new List<int> {6, 5});
-            originalRaspPositions.Add(new List<int> {10, 10});
+            originalRaspPositions.Add([8, 2]);
+            originalRaspPositions.Add([6, 5]);
+            originalRaspPositions.Add([10, 10]);
             PyObject[] raspPositions = [];
 
             foreach (var position in originalRaspPositions)
