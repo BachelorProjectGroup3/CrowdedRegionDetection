@@ -24,6 +24,7 @@
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
         <PackageReference Include="pythonnet" Version="3.0.5" />
         <PackageReference Include="SkiaSharp" Version="3.116.1" />
+        <PackageReference Include="System.Linq" Version="4.3.0" />
     </ItemGroup>
 
     <ItemGroup>

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CrowdedBackend.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CrowdedBackend.Controllers
 {
@@ -27,18 +28,26 @@ namespace CrowdedBackend.Controllers
             return await _context.DetectedDevice.ToListAsync();
         }
 
-        // GET: api/DetectedDevices/17891909
-        [HttpGet("{timestamp}")]
-        public async Task<ActionResult<DetectedDevice>> GetDetectedDevice(int timestamp)
+        // GET: api/DetectedDevices/getSpecificTime/17891909
+        [HttpGet("getSpecificTime/{timestamp}")]
+        public async Task<ActionResult<List<(float x, float y)>>> GetDetectedDevice(int timestamp)
         {
-            var detectedDevice = await _context.DetectedDevice.FindAsync(timestamp);
+            // TODO: We should find the closest timestamp to the given
+            var detectedDevices = await _context.DetectedDevice
+                .Where(d => d.timestamp.Equals(timestamp)).ToListAsync();
 
-            if (detectedDevice == null)
+            List<(float x, float y)> listOfDeviceLocations = [];
+            foreach (var detectedDevice in detectedDevices)
+            {
+                listOfDeviceLocations.Add((detectedDevice.deviceX, detectedDevice.deviceY));
+            }
+            
+            if (listOfDeviceLocations.IsNullOrEmpty())
             {
                 return NotFound();
             }
 
-            return detectedDevice;
+            return listOfDeviceLocations;
         }
 
         // PUT: api/DetectedDevices/5
@@ -81,6 +90,23 @@ namespace CrowdedBackend.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetDetectedDevice", new { id = detectedDevice.detectedDeviceId }, detectedDevice);
+        }
+
+        // POST: api/DetectedDevices
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("/uploadMultiple")]
+        public async Task<ActionResult<DetectedDevice>> PostDetectedDevices(List<DetectedDevice> detectedDevices)
+        {
+            DateTime now = DateTime.Now;
+
+            foreach (var detectedDevice in detectedDevices)
+            {
+                detectedDevice.timestamp = now;
+                _context.DetectedDevice.Add(detectedDevice);
+            }
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetDetectedDevice", new { timestamp = now }, detectedDevices);
         }
 
         // DELETE: api/DetectedDevices/5
