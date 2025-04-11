@@ -28,26 +28,37 @@ namespace CrowdedBackend.Controllers
             return await _context.DetectedDevice.ToListAsync();
         }
 
-        // GET: api/DetectedDevices/getSpecificTime/17891909
-        [HttpGet("getSpecificTime/{timestamp}")]
-        public async Task<ActionResult<List<(float x, float y)>>> GetDetectedDevice(int timestamp)
+        // GET: api/DetectedDevices/getHeatmapAtSpecificTime/17891909
+        [HttpGet("getHeatmapAtSpecificTime/{timestamp}")]
+        public async Task<ActionResult<String>> GetDetectedDevice(int timestamp)
         {
             // TODO: We should find the closest timestamp to the given
             var detectedDevices = await _context.DetectedDevice
                 .Where(d => d.timestamp.Equals(timestamp)).ToListAsync();
-
+   
+            if (detectedDevices.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
+            
             List<(float x, float y)> listOfDeviceLocations = [];
             foreach (var detectedDevice in detectedDevices)
             {
                 listOfDeviceLocations.Add((detectedDevice.deviceX, detectedDevice.deviceY));
             }
-            
-            if (listOfDeviceLocations.IsNullOrEmpty())
-            {
-                return NotFound();
-            }
 
-            return listOfDeviceLocations;
+            Venue venue = detectedDevices[0].Venue;
+
+            List<(float x, float y)> raspLocations = [];
+
+            foreach (var rasp in venue.RaspberryPis)
+            {
+                raspLocations.Add((rasp.raspX, rasp.raspY));
+            }
+            
+            String heatmapBase64Encoded = HeatmapGenerator.GenerateAsync(venue.VenueName, raspLocations, listOfDeviceLocations);
+
+            return heatmapBase64Encoded;
         }
 
         // PUT: api/DetectedDevices/5

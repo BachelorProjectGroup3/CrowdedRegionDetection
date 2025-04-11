@@ -16,15 +16,9 @@ public class HeatmapGenerator
     private const float MapXMax = 12;
     private const float MapYMin = 0;
     private const float MapYMax = 12;
-    private readonly string _uploadUrl;
 
-    public HeatmapGenerator( string uploadUrl)
-    {
-        
-        _uploadUrl = uploadUrl;
-    }
 
-    public HttpContent GenerateAsync(string venueName, List<(float x, float y)> raspberryPiPositions, List<(float x, float y)> peoplePositions)
+    public static String GenerateAsync(string venueName, List<(float x, float y)> raspberryPiPositions, List<(float x, float y)> peoplePositions)
     {
         string currentDirectory = Directory.GetCurrentDirectory();
         var backgroundPath = Path.Combine(currentDirectory, venueName);
@@ -61,19 +55,13 @@ public class HeatmapGenerator
 
         Console.WriteLine($"Saved: {filename}");
         
-        // Upload
-        using var client = new HttpClient();
-        HttpContent content = new StringContent(converted);
-        // var response = await client.PostAsync(_uploadUrl, content);
-        // Console.WriteLine($"Upload status: {response.StatusCode}");
-
         // Cleanup
         File.Delete(filename);
         
-        return content;
+        return converted;
     }
 
-    private void DrawHeatmap(SKCanvas canvas, double[,] density)
+    private static void DrawHeatmap(SKCanvas canvas, double[,] density)
     {
         double max = 0;
         foreach (var d in density) max = Math.Max(max, d);
@@ -95,7 +83,7 @@ public class HeatmapGenerator
         }
     }
 
-    private SKColor GetHeatmapColor(double value)
+    private static SKColor GetHeatmapColor(double value)
     {
         // Jet colormap (rough approximation)
         byte r = (byte)(Math.Min(1.0, 1.5 - Math.Abs(4 * (value - 0.75))) * 255);
@@ -104,7 +92,7 @@ public class HeatmapGenerator
         return new SKColor(r, g, b, 128); // semi-transparent
     }
 
-    private void DrawPoints(SKCanvas canvas, List<(float x, float y)> points, SKColor fill, SKColor border, float radius)
+    private static void DrawPoints(SKCanvas canvas, List<(float x, float y)> points, SKColor fill, SKColor border, float radius)
     {
         foreach (var (x, y) in points)
         {
@@ -125,7 +113,7 @@ public class HeatmapGenerator
         }
     }
     
-    private double[,] Compute2DKDE(List<(float x, float y)> points)
+    private static double[,] Compute2DKDE(List<(float x, float y)> points)
     {
         double bandwidth = 0.8; // adjust for blur/sharpness
         int N = points.Count;
