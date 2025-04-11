@@ -27,11 +27,11 @@ namespace CrowdedBackend.Controllers
             return await _context.DetectedDevice.ToListAsync();
         }
 
-        // GET: api/DetectedDevices/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<DetectedDevice>> GetDetectedDevice(int id)
+        // GET: api/DetectedDevices/17891909
+        [HttpGet("{timestamp}")]
+        public async Task<ActionResult<DetectedDevice>> GetDetectedDevice(int timestamp)
         {
-            var detectedDevice = await _context.DetectedDevice.FindAsync(id);
+            var detectedDevice = await _context.DetectedDevice.FindAsync(timestamp);
 
             if (detectedDevice == null)
             {
