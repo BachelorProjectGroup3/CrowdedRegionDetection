@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CrowdedBackend.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CrowdedBackend.Controllers
 {
@@ -27,18 +28,37 @@ namespace CrowdedBackend.Controllers
             return await _context.DetectedDevice.ToListAsync();
         }
 
-        // GET: api/DetectedDevices/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<DetectedDevice>> GetDetectedDevice(int id)
+        // GET: api/DetectedDevices/getHeatmapAtSpecificTime/17891909
+        [HttpGet("getHeatmapAtSpecificTime/{timestamp}")]
+        public async Task<ActionResult<String>> GetDetectedDevice(int timestamp)
         {
-            var detectedDevice = await _context.DetectedDevice.FindAsync(id);
-
-            if (detectedDevice == null)
+            // TODO: We should find the closest timestamp to the given
+            var detectedDevices = await _context.DetectedDevice
+                .Where(d => d.timestamp.Equals(timestamp)).ToListAsync();
+   
+            if (detectedDevices.IsNullOrEmpty())
             {
                 return NotFound();
             }
+            
+            List<(float x, float y)> listOfDeviceLocations = [];
+            foreach (var detectedDevice in detectedDevices)
+            {
+                listOfDeviceLocations.Add((detectedDevice.deviceX, detectedDevice.deviceY));
+            }
 
-            return detectedDevice;
+            Venue venue = detectedDevices[0].Venue;
+
+            List<(float x, float y)> raspLocations = [];
+
+            foreach (var rasp in venue.RaspberryPis)
+            {
+                raspLocations.Add((rasp.raspX, rasp.raspY));
+            }
+            
+            String heatmapBase64Encoded = HeatmapGenerator.GenerateAsync(venue.VenueName, raspLocations, listOfDeviceLocations);
+
+            return heatmapBase64Encoded;
         }
 
         // PUT: api/DetectedDevices/5
@@ -81,6 +101,23 @@ namespace CrowdedBackend.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetDetectedDevice", new { id = detectedDevice.detectedDeviceId }, detectedDevice);
+        }
+
+        // POST: api/DetectedDevices
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("/uploadMultiple")]
+        public async Task<ActionResult<DetectedDevice>> PostDetectedDevices(List<DetectedDevice> detectedDevices)
+        {
+            DateTime now = DateTime.Now;
+
+            foreach (var detectedDevice in detectedDevices)
+            {
+                detectedDevice.timestamp = now;
+                _context.DetectedDevice.Add(detectedDevice);
+            }
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetDetectedDevice", new { timestamp = now }, detectedDevices);
         }
 
         // DELETE: api/DetectedDevices/5
