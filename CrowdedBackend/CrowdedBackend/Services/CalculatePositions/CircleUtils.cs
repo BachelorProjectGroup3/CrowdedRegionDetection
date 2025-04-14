@@ -1,5 +1,3 @@
-using NuGet.Protocol;
-
 namespace CrowdedBackend.Services.CalculatePositions;
 
 using System;
@@ -13,45 +11,51 @@ public class CircleUtils
     private const double CIRCLE_EXTRA_SIZE = 2.0;
     private const double SMALL = 1e-10;
 
-    private List<RaspOutputData>? rasp1OutputData;
-    private List<RaspOutputData>? rasp2OutputData;
-    private List<RaspOutputData>? rasp3OutputData;
+    private readonly RaspOutputData? _rasp1OutputData;
+    private readonly RaspOutputData? _rasp2OutputData;
+    private readonly RaspOutputData? _rasp3OutputData;
 
-    private Point rasp1Point;
-    private Point rasp2Point;
-    private Point rasp3Point;
+    private readonly Point _rasp1Point;
+    private readonly Point _rasp2Point;
+    private readonly Point _rasp3Point;
 
-    public CircleUtils(String rasp1Input, String rasp2Input, String rasp3Input)
+    public CircleUtils(String rasp1Input, Point rasp1Point, String rasp2Input, Point rasp2Point, String rasp3Input, Point rasp3Point)
     {
-        this.rasp1OutputData = JsonConvert.DeserializeObject<List<RaspOutputData>>(rasp1Input);
-        this.rasp2OutputData = JsonConvert.DeserializeObject<List<RaspOutputData>>(rasp2Input);
-        this.rasp3OutputData = JsonConvert.DeserializeObject<List<RaspOutputData>>(rasp3Input);
+        this._rasp1OutputData = JsonConvert.DeserializeObject<RaspOutputData>(rasp1Input);
+        this._rasp2OutputData = JsonConvert.DeserializeObject<RaspOutputData>(rasp2Input);
+        this._rasp3OutputData = JsonConvert.DeserializeObject<RaspOutputData>(rasp3Input);
         
-        //TODO:GET rasp123Point positions from data
+        this._rasp1Point = rasp1Point;
+        this._rasp2Point = rasp2Point;
+        this._rasp3Point = rasp3Point;
     }
 
-    // public Point CalculatePosition()
-    public double CalculatePosition()
+    public Point? CalculatePosition()
     {
         try
         {
-            if (rasp1OutputData is null || rasp2OutputData is null || rasp3OutputData is null)
+            if (_rasp1OutputData is null || _rasp2OutputData is null || _rasp3OutputData is null)
             {
-                throw new Exception("One or more inputs are null");
+                throw new Exception("One or more raspOutput values are invalid");
+            }
+
+            if (_rasp1Point is null || _rasp2Point is null || _rasp3Point is null)
+            {
+                throw new Exception("One or more raspPoint values are invalid");
             }
             
-            foreach (var rasp1Data in rasp1OutputData)
+            foreach (var rasp1Data in _rasp1OutputData.events)
             {
                 var macAddress = rasp1Data.macAddress;
-                var rasp2Match = rasp2OutputData.First(rasp2Data => rasp2Data.macAddress == macAddress);
-                var rasp3Match = rasp3OutputData.First(rasp3Data => rasp3Data.macAddress == macAddress);
+                var rasp2Match = _rasp2OutputData.events.First(rasp2Data => rasp2Data.macAddress == macAddress);
+                var rasp3Match = _rasp3OutputData.events.First(rasp3Data => rasp3Data.macAddress == macAddress);
 
                 List<Circle> circles = new List<Circle>();
-                circles.Add(new Circle(this.rasp1Point.X, this.rasp1Point.Y, this.RSSIToLength(rasp1Data.signalStrengthRSSI)));
-                circles.Add(new Circle(this.rasp2Point.X, this.rasp2Point.Y, this.RSSIToLength(rasp2Match.signalStrengthRSSI)));
-                circles.Add(new Circle(this.rasp3Point.X, this.rasp3Point.Y, this.RSSIToLength(rasp3Match.signalStrengthRSSI)));
+                circles.Add(new Circle(this._rasp1Point.X, this._rasp1Point.Y, this.RSSIToLength(rasp1Data.signalStrengthRSSI)));
+                circles.Add(new Circle(this._rasp2Point.X, this._rasp2Point.Y, this.RSSIToLength(rasp2Match.signalStrengthRSSI)));
+                circles.Add(new Circle(this._rasp3Point.X, this._rasp3Point.Y, this.RSSIToLength(rasp3Match.signalStrengthRSSI)));
 
-                return IntersectionArea(circles);
+                return EstimatedPoint(circles);
             }
         }
         catch(Exception e)
@@ -59,116 +63,26 @@ public class CircleUtils
             Console.WriteLine(e);
         }
         
-        return 0.0;
+        return null;
     }
 
     private double RSSIToLength(double rssi)
     {
+        // TODO:Actually calculate
         return rssi + RSSI_TO_LENGTH + CIRCLE_EXTRA_SIZE;
     }
 
-    private double IntersectionArea(List<Circle> circles, IntersectionStats stats = null)
+    private Point EstimatedPoint(List<Circle> circles)
     {
+        //TODO: ALTERNATIVELY, use triangle points to determine ish-middle if this is too slow
         var intersectionPoints = GetIntersectionPoints(circles);
         var innerPoints = intersectionPoints.Where(p => ContainedInCircles(p, circles)).ToList();
-
-        double arcArea = 0, polygonArea = 0;
-        var arcs = new List<Arc>();
-
-        if (innerPoints.Count > 1)
+        if (innerPoints is null || innerPoints.Count == 0)
         {
-            var center = GetCenter(innerPoints);
-            foreach (var p in innerPoints)
-            {
-                p.Angle = Math.Atan2(p.X - center.X, p.Y - center.Y);
-            }
-
-            innerPoints.Sort((a, b) => b.Angle.CompareTo(a.Angle));
-
-            var p2 = innerPoints.Last();
-            foreach (var p1 in innerPoints)
-            {
-                polygonArea += (p2.X + p1.X) * (p1.Y - p2.Y);
-
-                var midPoint = new Point((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2);
-                Arc arc = null;
-
-                foreach (var idx in p1.ParentIndex)
-                {
-                    if (p2.ParentIndex.Contains(idx))
-                    {
-                        var circle = circles[idx];
-                        var a1 = Math.Atan2(p1.X - circle.X, p1.Y - circle.Y);
-                        var a2 = Math.Atan2(p2.X - circle.X, p2.Y - circle.Y);
-
-                        var angleDiff = a2 - a1;
-                        if (angleDiff < 0)
-                            angleDiff += 2 * Math.PI;
-
-                        var a = a2 - angleDiff / 2;
-                        var arcX = circle.X + circle.Radius * Math.Sin(a);
-                        var arcY = circle.Y + circle.Radius * Math.Cos(a);
-                        var width = Distance(midPoint, new Point(arcX, arcY));
-
-                        if (width > circle.Radius * 2)
-                            width = circle.Radius * 2;
-
-                        if (arc == null || arc.Width > width)
-                        {
-                            arc = new Arc
-                            {
-                                Circle = circle,
-                                Width = width,
-                                P1 = p1,
-                                P2 = p2
-                            };
-                        }
-                    }
-                }
-
-                if (arc != null)
-                {
-                    arcs.Add(arc);
-                    arcArea += CircleArea(arc.Circle.Radius, arc.Width);
-                    p2 = p1;
-                }
-            }
+            throw new Exception("No inner points in area");
         }
-        else
-        {
-            var smallest = circles.OrderBy(c => c.Radius).First();
-            var disjoint = circles.Any(c => Distance(c, smallest) > Math.Abs(smallest.Radius - c.Radius));
-
-            if (disjoint)
-            {
-                arcArea = polygonArea = 0;
-            }
-            else
-            {
-                arcArea = smallest.Radius * smallest.Radius * Math.PI;
-                arcs.Add(new Arc
-                {
-                    Circle = smallest,
-                    Width = smallest.Radius * 2,
-                    P1 = new Point(smallest.X, smallest.Y + smallest.Radius),
-                    P2 = new Point(smallest.X - SMALL, smallest.Y + smallest.Radius)
-                });
-            }
-        }
-
-        polygonArea /= 2;
-
-        if (stats != null)
-        {
-            stats.Area = arcArea + polygonArea;
-            stats.ArcArea = arcArea;
-            stats.PolygonArea = polygonArea;
-            stats.Arcs = arcs;
-            stats.InnerPoints = innerPoints;
-            stats.IntersectionPoints = intersectionPoints;
-        }
-
-        return arcArea + polygonArea;
+        
+        return GetCenter(innerPoints);
     }
 
     public bool ContainedInCircles(Point point, List<Circle> circles)
@@ -192,11 +106,6 @@ public class CircleUtils
             }
         }
         return result;
-    }
-
-    public double CircleArea(double r, double width)
-    {
-        return r * r * Math.Acos(1 - width / r) - (r - width) * Math.Sqrt(width * (2 * r - width));
     }
 
     public double Distance(Point p1, Point p2)
