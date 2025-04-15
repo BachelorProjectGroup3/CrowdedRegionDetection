@@ -21,4 +21,13 @@ public class DetectedDevice
 
     // Navigation property
     public Venue Venue { get; set; }
+
+
+    public DetectedDevice(int venueID, int deviceX, int deviceY, DateTime timestamp)
+    {
+        this.venueID = venueID;
+        this.deviceX = deviceX;
+        this.deviceY = deviceY;
+        this.timestamp = timestamp;
+    }
 }

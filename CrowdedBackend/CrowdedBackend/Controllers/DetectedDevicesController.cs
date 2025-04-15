@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CrowdedBackend.Models;
+using CrowdedBackend.Services.CalculatePositions;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CrowdedBackend.Controllers
@@ -15,10 +16,12 @@ namespace CrowdedBackend.Controllers
     public class DetectedDevicesController : ControllerBase
     {
         private readonly MyDbContext _context;
+        private CircleUtils circleUtils;
 
         public DetectedDevicesController(MyDbContext context)
         {
             _context = context;
+            circleUtils = new CircleUtils();
         }
 
         // GET: api/DetectedDevices
@@ -56,7 +59,7 @@ namespace CrowdedBackend.Controllers
                 raspLocations.Add((rasp.raspX, rasp.raspY));
             }
             
-            String heatmapBase64Encoded = HeatmapGenerator.GenerateAsync(venue.VenueName, raspLocations, listOfDeviceLocations);
+            String heatmapBase64Encoded = HeatmapGenerator.Generate(venue.VenueName, raspLocations, listOfDeviceLocations);
 
             return heatmapBase64Encoded;
         }
@@ -106,18 +109,30 @@ namespace CrowdedBackend.Controllers
         // POST: api/DetectedDevices
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("/uploadMultiple")]
-        public async Task<ActionResult<DetectedDevice>> PostDetectedDevices(List<DetectedDevice> detectedDevices)
+        public async Task<ActionResult<DetectedDevice>> PostDetectedDevices(RaspOutputData raspOutputData)
         {
             DateTime now = DateTime.Now;
 
-            foreach (var detectedDevice in detectedDevices)
-            {
-                detectedDevice.timestamp = now;
-                _context.DetectedDevice.Add(detectedDevice);
-            }
-            await _context.SaveChangesAsync();
+            var raspberryPi = await _context.RaspberryPi.FindAsync(raspOutputData.id);
 
-            return CreatedAtAction("GetDetectedDevice", new { timestamp = now }, detectedDevices);
+            if (raspberryPi == null)
+            {
+                return NotFound();
+            }
+
+            if (circleUtils.addData(raspOutputData, new Point(raspberryPi.raspX, raspberryPi.raspY)) == 3)
+            {
+                var points = circleUtils.CalculatePosition();
+                foreach (var point in points)
+                {
+                    _context.Add((raspberryPi.VenueID, point.X, point.Y, now));
+                }
+                
+                await _context.SaveChangesAsync();
+                circleUtils.wipeData();
+            }
+            
+            return CreatedAtAction("GetDetectedDevice", new { timestamp = now });
         }
 
         // DELETE: api/DetectedDevices/5
