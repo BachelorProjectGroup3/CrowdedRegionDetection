@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CrowdedBackend.Models;
+using CrowdedBackend.Services.CalculatePositions;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CrowdedBackend.Controllers
 {
@@ -14,10 +16,12 @@ namespace CrowdedBackend.Controllers
     public class DetectedDevicesController : ControllerBase
     {
         private readonly MyDbContext _context;
+        private CircleUtils circleUtils;
 
         public DetectedDevicesController(MyDbContext context)
         {
             _context = context;
+            circleUtils = new CircleUtils();
         }
 
         // GET: api/DetectedDevices
@@ -27,18 +31,37 @@ namespace CrowdedBackend.Controllers
             return await _context.DetectedDevice.ToListAsync();
         }
 
-        // GET: api/DetectedDevices/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<DetectedDevice>> GetDetectedDevice(int id)
+        // GET: api/DetectedDevices/getHeatmapAtSpecificTime/17891909
+        [HttpGet("getHeatmapAtSpecificTime/{timestamp}")]
+        public async Task<ActionResult<String>> GetDetectedDevice(int timestamp)
         {
-            var detectedDevice = await _context.DetectedDevice.FindAsync(id);
-
-            if (detectedDevice == null)
+            // TODO: We should find the closest timestamp to the given
+            var detectedDevices = await _context.DetectedDevice
+                .Where(d => d.timestamp.Equals(timestamp)).ToListAsync();
+   
+            if (detectedDevices.IsNullOrEmpty())
             {
                 return NotFound();
             }
+            
+            List<(float x, float y)> listOfDeviceLocations = [];
+            foreach (var detectedDevice in detectedDevices)
+            {
+                listOfDeviceLocations.Add((detectedDevice.deviceX, detectedDevice.deviceY));
+            }
 
-            return detectedDevice;
+            Venue venue = detectedDevices[0].Venue;
+
+            List<(float x, float y)> raspLocations = [];
+
+            foreach (var rasp in venue.RaspberryPis)
+            {
+                raspLocations.Add((rasp.raspX, rasp.raspY));
+            }
+            
+            String heatmapBase64Encoded = HeatmapGenerator.Generate(venue.VenueName, raspLocations, listOfDeviceLocations);
+
+            return heatmapBase64Encoded;
         }
 
         // PUT: api/DetectedDevices/5
@@ -81,6 +104,42 @@ namespace CrowdedBackend.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetDetectedDevice", new { id = detectedDevice.detectedDeviceId }, detectedDevice);
+        }
+
+        // POST: api/DetectedDevices
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("/uploadMultiple")]
+        public async Task<ActionResult<DetectedDevice>> PostDetectedDevices(RaspOutputData raspOutputData)
+        {
+            DateTime now = DateTime.Now;
+
+            var raspberryPi = await _context.RaspberryPi.FindAsync(raspOutputData.id);
+
+            if (raspberryPi == null)
+            {
+                return NotFound();
+            }
+
+            if (circleUtils.addData(raspOutputData, new Point(raspberryPi.raspX, raspberryPi.raspY)) == 3)
+            {
+                var points = circleUtils.CalculatePosition();
+                foreach (var point in points)
+                {
+                    var detectedDevice = new DetectedDevice
+                    {
+                        VenueID = raspberryPi.VenueID,
+                        X = point.X,
+                        Y = point.Y,
+                        Timestamp = now
+                    };
+                    _context.Add(detectedDevice);
+                }
+                
+                await _context.SaveChangesAsync();
+                circleUtils.wipeData();
+            }
+            
+            return CreatedAtAction("GetDetectedDevice", new { timestamp = now });
         }
 
         // DELETE: api/DetectedDevices/5
