@@ -7,7 +7,7 @@ public class RaspberryPi
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public string RaspberryPiID { get; set; }
+    public int RaspberryPiID { get; set; }
 
     [ForeignKey("Venue")]
     public int VenueID { get; set; }
