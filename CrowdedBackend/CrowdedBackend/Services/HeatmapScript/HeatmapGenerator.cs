@@ -18,7 +18,7 @@ public class HeatmapGenerator
     private const float MapYMax = 12;
 
 
-    public static String GenerateAsync(string venueName, List<(float x, float y)> raspberryPiPositions, List<(float x, float y)> peoplePositions)
+    public static String Generate(string venueName, List<(float x, float y)> raspberryPiPositions, List<(float x, float y)> peoplePositions)
     {
         string currentDirectory = Directory.GetCurrentDirectory();
         var backgroundPath = Path.Combine(currentDirectory, venueName);
