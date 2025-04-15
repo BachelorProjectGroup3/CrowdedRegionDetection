@@ -11,8 +11,8 @@ public class CircleUtils
     private const double CIRCLE_EXTRA_SIZE = 2.0;
     private const double SMALL = 1e-10;
 
-    private List<RaspOutputData?> raspOutputData;
-    private List<Point> raspPoints;
+    private List<RaspOutputData?> raspOutputData = new List<RaspOutputData?>();
+    private List<Point> raspPoints = new List<Point>();
 
     public int addData(RaspOutputData raspInput, Point raspPoint)
     {
