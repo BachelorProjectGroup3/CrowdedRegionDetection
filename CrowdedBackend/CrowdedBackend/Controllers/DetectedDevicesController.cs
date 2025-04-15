@@ -125,7 +125,14 @@ namespace CrowdedBackend.Controllers
                 var points = circleUtils.CalculatePosition();
                 foreach (var point in points)
                 {
-                    _context.Add((raspberryPi.VenueID, point.X, point.Y, now));
+                    var detectedDevice = new DetectedDevice
+                    {
+                        VenueID = raspberryPi.VenueID,
+                        X = point.X,
+                        Y = point.Y,
+                        Timestamp = now
+                    };
+                    _context.Add(detectedDevice);
                 }
                 
                 await _context.SaveChangesAsync();
