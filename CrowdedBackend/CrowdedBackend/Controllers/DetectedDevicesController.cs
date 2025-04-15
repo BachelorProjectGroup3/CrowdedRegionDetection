@@ -47,7 +47,7 @@ namespace CrowdedBackend.Controllers
             List<(float x, float y)> listOfDeviceLocations = [];
             foreach (var detectedDevice in detectedDevices)
             {
-                listOfDeviceLocations.Add((detectedDevice.deviceX, detectedDevice.deviceY));
+                listOfDeviceLocations.Add(((float) detectedDevice.deviceX,(float) detectedDevice.deviceY));
             }
 
             Venue venue = detectedDevices[0].Venue;
@@ -56,7 +56,7 @@ namespace CrowdedBackend.Controllers
 
             foreach (var rasp in venue.RaspberryPis)
             {
-                raspLocations.Add((rasp.raspX, rasp.raspY));
+                raspLocations.Add(((float) rasp.raspX, (float) rasp.raspY));
             }
             
             String heatmapBase64Encoded = HeatmapGenerator.Generate(venue.VenueName, raspLocations, listOfDeviceLocations);
@@ -126,12 +126,12 @@ namespace CrowdedBackend.Controllers
                 foreach (var point in points)
                 {
                     var detectedDevice = new DetectedDevice
-                    {
-                        VenueID = raspberryPi.VenueID,
-                        X = point.X,
-                        Y = point.Y,
-                        Timestamp = now
-                    };
+                    (
+                        raspberryPi.VenueID,
+                        point.X,
+                        point.Y,
+                        now
+                    );
                     _context.Add(detectedDevice);
                 }
                 
