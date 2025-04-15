@@ -13,8 +13,8 @@ public class DetectedDevice
     [ForeignKey("Venue")]
     public int venueID { get; set; }
 
-    public int deviceX { get; set; }
-    public int deviceY { get; set; }
+    public double deviceX { get; set; }
+    public double deviceY { get; set; }
 
     [Required]
     public DateTime timestamp { get; set; }
@@ -23,7 +23,7 @@ public class DetectedDevice
     public Venue Venue { get; set; }
 
 
-    public DetectedDevice(int venueID, int deviceX, int deviceY, DateTime timestamp)
+    public DetectedDevice(int venueID, double deviceX, double deviceY, DateTime timestamp)
     {
         this.venueID = venueID;
         this.deviceX = deviceX;

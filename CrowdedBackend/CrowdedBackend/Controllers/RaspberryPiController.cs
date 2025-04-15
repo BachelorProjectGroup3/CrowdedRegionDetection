@@ -44,7 +44,7 @@ namespace CrowdedBackend.Controllers
         // PUT: api/RaspberryPi/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRaspberryPi(int id, RaspberryPi raspberryPi)
+        public async Task<IActionResult> PutRaspberryPi(string id, RaspberryPi raspberryPi)
         {
             if (id != raspberryPi.RaspberryPiID)
             {
@@ -99,7 +99,7 @@ namespace CrowdedBackend.Controllers
             return NoContent();
         }
 
-        private bool RaspberryPiExists(int id)
+        private bool RaspberryPiExists(string id)
         {
             return _context.RaspberryPi.Any(e => e.RaspberryPiID == id);
         }
