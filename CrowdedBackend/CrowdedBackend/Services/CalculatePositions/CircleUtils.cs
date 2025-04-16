@@ -46,16 +46,16 @@ public class CircleUtils
                 throw new Exception("raspPoints values are invalid");
             }
 
-            foreach (var rasp1Data in raspOutputData[0].events)
+            foreach (var rasp1Data in raspOutputData[0].Events)
             {
-                var macAddress = rasp1Data.macAddress;
-                var rasp2Match = raspOutputData[1].events.First(rasp2Data => rasp2Data.macAddress == macAddress);
-                var rasp3Match = raspOutputData[2].events.First(rasp3Data => rasp3Data.macAddress == macAddress);
+                var macAddress = rasp1Data.MacAddress;
+                var rasp2Match = raspOutputData[1].Events.First(rasp2Data => rasp2Data.MacAddress == macAddress);
+                var rasp3Match = raspOutputData[2].Events.First(rasp3Data => rasp3Data.MacAddress == macAddress);
 
                 List<Circle> circles = new List<Circle>();
-                circles.Add(new Circle(this.raspPoints[0].X, this.raspPoints[0].Y, this.RSSIToLength(rasp1Data.signalStrengthRSSI)));
-                circles.Add(new Circle(this.raspPoints[1].X, this.raspPoints[1].Y, this.RSSIToLength(rasp2Match.signalStrengthRSSI)));
-                circles.Add(new Circle(this.raspPoints[2].X, this.raspPoints[2].Y, this.RSSIToLength(rasp3Match.signalStrengthRSSI)));
+                circles.Add(new Circle(this.raspPoints[0].X, this.raspPoints[0].Y, this.RSSIToLength(rasp1Data.Rssi)));
+                circles.Add(new Circle(this.raspPoints[1].X, this.raspPoints[1].Y, this.RSSIToLength(rasp2Match.Rssi)));
+                circles.Add(new Circle(this.raspPoints[2].X, this.raspPoints[2].Y, this.RSSIToLength(rasp3Match.Rssi)));
 
                 points.Add(EstimatedPoint(circles));
             }

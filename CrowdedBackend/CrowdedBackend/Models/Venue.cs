@@ -15,6 +15,6 @@ public class Venue
     public string VenueName { get; set; }
 
     // Navigation properties
-    public ICollection<RaspberryPi> RaspberryPis { get; set; }
-    public ICollection<DetectedDevice> DetectedDevices { get; set; }
+    public ICollection<RaspberryPi> RaspberryPis { get; set; } = new List<RaspberryPi>();
+    public ICollection<DetectedDevice> DetectedDevices { get; set; } = new List<DetectedDevice>();
 }

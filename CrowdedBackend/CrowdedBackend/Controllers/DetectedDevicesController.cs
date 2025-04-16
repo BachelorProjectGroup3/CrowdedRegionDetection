@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CrowdedBackend.Models;
 using CrowdedBackend.Services.CalculatePositions;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Protocol;
 
 namespace CrowdedBackend.Controllers
 {
@@ -17,11 +20,14 @@ namespace CrowdedBackend.Controllers
     {
         private readonly MyDbContext _context;
         private CircleUtils circleUtils;
+        private readonly ILogger<DetectedDevicesController> _logger;
 
-        public DetectedDevicesController(MyDbContext context)
+
+        public DetectedDevicesController(MyDbContext context, ILogger<DetectedDevicesController> logger)
         {
             _context = context;
             circleUtils = new CircleUtils();
+            _logger = logger;
         }
 
         // GET: api/DetectedDevices
@@ -102,37 +108,32 @@ namespace CrowdedBackend.Controllers
         {
             _context.DetectedDevice.Add(detectedDevice);
             await _context.SaveChangesAsync();
-
+        
             return CreatedAtAction("GetDetectedDevice", new { id = detectedDevice.detectedDeviceId }, detectedDevice);
         }
 
-        // POST: api/DetectedDevices
+        // POST: api/DetectedDevices/uploadMultiple
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("/uploadMultiple")]
+        [HttpPost("uploadMultiple")]
         public async Task<ActionResult<DetectedDevice>> PostDetectedDevices(RaspOutputData raspOutputData)
         {
-            DateTime now = DateTime.Now;
+            long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-            var raspberryPi = await _context.RaspberryPi.FindAsync(raspOutputData.id);
-
+            Console.WriteLine(raspOutputData.ToJson());
+            
+            var raspberryPi = await _context.RaspberryPi.FindAsync(raspOutputData.Id);
+            
             if (raspberryPi == null)
             {
-                return NotFound();
+                return Problem("Raspberry Pi not found", statusCode: 500);
             }
-
+            
             if (circleUtils.addData(raspOutputData, new Point(raspberryPi.raspX, raspberryPi.raspY)) == 3)
             {
                 var points = circleUtils.CalculatePosition();
                 foreach (var point in points)
                 {
-                    var detectedDevice = new DetectedDevice
-                    (
-                        raspberryPi.VenueID,
-                        point.X,
-                        point.Y,
-                        now
-                    );
-                    _context.Add(detectedDevice);
+                    _context.Add(null);
                 }
                 
                 await _context.SaveChangesAsync();
@@ -162,5 +163,6 @@ namespace CrowdedBackend.Controllers
         {
             return _context.DetectedDevice.Any(e => e.detectedDeviceId == id);
         }
+
     }
 }
