@@ -1,17 +1,30 @@
 using CrowdedBackend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.Extensions.Http.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers(); // Add this to use controllers
-builder.Services.AddOpenApi(); // Optional, for OpenAPI/Swagger documentation
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHttpClient();
+builder.Services.AddOpenApi();
 
 // Configure PostgreSQL database connection
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddHttpLogging(logging => {
+    logging.LoggingFields = HttpLoggingFields.All;
+    logging.RequestHeaders.Add("Referer");
+    logging.ResponseHeaders.Add("MyCustomResponseHeader");
+});
+
 var app = builder.Build();
+
+app.UseHttpLogging();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

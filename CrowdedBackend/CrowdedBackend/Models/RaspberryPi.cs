@@ -16,5 +16,5 @@ public class RaspberryPi
     public double raspY { get; set; }
 
     // Navigation property
-    public Venue Venue { get; set; }
+    public Venue? Venue { get; set; }
 }

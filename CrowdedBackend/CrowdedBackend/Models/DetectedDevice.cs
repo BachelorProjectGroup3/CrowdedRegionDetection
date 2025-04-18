@@ -17,17 +17,8 @@ public class DetectedDevice
     public double deviceY { get; set; }
 
     [Required]
-    public DateTime timestamp { get; set; }
+    public long timestamp { get; set; }
 
     // Navigation property
-    public Venue Venue { get; set; }
-
-
-    public DetectedDevice(int venueID, double deviceX, double deviceY, DateTime timestamp)
-    {
-        this.venueID = venueID;
-        this.deviceX = deviceX;
-        this.deviceY = deviceY;
-        this.timestamp = timestamp;
-    }
+    public Venue? Venue { get; set; } 
 }
