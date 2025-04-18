@@ -134,6 +134,7 @@ namespace CrowdedBackend.Controllers
                 foreach (var point in points)
                 {
                     _context.Add(new DetectedDevice{venueID = raspberryPi.VenueID, deviceX = point.X, deviceY = point.Y, timestamp = now});
+
                 }
                 
                 await _context.SaveChangesAsync();
