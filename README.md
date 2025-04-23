@@ -15,3 +15,5 @@ then remove `--useSqlite` and add `--databaseProvider postgres`
 
 Make Rider auto generate a migration `dotnet ef migrations add <NameOfMigration>`.
 Make Rider build database `dotnet ef database update --verbose`
+
+This is an update
