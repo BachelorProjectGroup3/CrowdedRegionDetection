@@ -12,6 +12,20 @@ namespace CrowdedBackend.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "RaspData",
+                columns: table => new
+                {
+                    MacAddress = table.Column<string>(type: "text", nullable: false),
+                    raspId = table.Column<int>(type: "integer", nullable: false),
+                    Rssi = table.Column<int>(type: "integer", nullable: false),
+                    UnixTimestamp = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RaspData", x => x.MacAddress);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Venue",
                 columns: table => new
                 {
@@ -86,6 +100,9 @@ namespace CrowdedBackend.Migrations
 
             migrationBuilder.DropTable(
                 name: "RaspberryPi");
+
+            migrationBuilder.DropTable(
+                name: "RaspData");
 
             migrationBuilder.DropTable(
                 name: "Venue");

@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CrowdedBackend.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20250416102151_InitialMigration")]
+    [Migration("20250422084725_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -49,6 +49,25 @@ namespace CrowdedBackend.Migrations
                     b.HasIndex("venueID");
 
                     b.ToTable("DetectedDevice");
+                });
+
+            modelBuilder.Entity("CrowdedBackend.Models.RaspData", b =>
+                {
+                    b.Property<string>("MacAddress")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Rssi")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("UnixTimestamp")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("raspId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("MacAddress");
+
+                    b.ToTable("RaspData");
                 });
 
             modelBuilder.Entity("CrowdedBackend.Models.RaspberryPi", b =>

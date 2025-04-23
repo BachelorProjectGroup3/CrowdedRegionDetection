@@ -1,3 +1,5 @@
+using CrowdedBackend.Models;
+
 namespace CrowdedBackend.Services.CalculatePositions;
 
 using System;

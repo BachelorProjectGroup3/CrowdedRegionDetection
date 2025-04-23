@@ -48,6 +48,25 @@ namespace CrowdedBackend.Migrations
                     b.ToTable("DetectedDevice");
                 });
 
+            modelBuilder.Entity("CrowdedBackend.Models.RaspData", b =>
+                {
+                    b.Property<string>("MacAddress")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Rssi")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("UnixTimestamp")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("raspId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("MacAddress");
+
+                    b.ToTable("RaspData");
+                });
+
             modelBuilder.Entity("CrowdedBackend.Models.RaspberryPi", b =>
                 {
                     b.Property<int>("RaspberryPiID")
