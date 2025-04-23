@@ -30,13 +30,36 @@ jobs:
       - name: Pull & build
         run: |
           cd ~/CrowdedRegionControl && git pull
-          cd ~/CrowdedRegionControl/CrowdedBackend/CrowdedBackend && dotnet build && dotnet ef database update --verbose
+          cd ~/CrowdedRegionControl/CrowdedBackend/CrowdedBackend
+          
+          dotnet build
 
+          echo "Checking for pending migrations..."
+          APPLIED=$(dotnet ef migrations list | grep '\[x\]' | wc -l)
+          TOTAL=$(dotnet ef migrations list | wc -l)
+
+          echo "Applied migrations: $APPLIED"
+          echo "Total migrations: $TOTAL"
+
+          if [ "$APPLIED" -lt "$TOTAL" ]; then
+            echo "Applying pending migrations..."
+            dotnet ef database update --verbose
+          else
+            echo "No pending migrations to apply."
+          fi
+          
   deploy:
     runs-on: self-hosted
     needs: [connect_with_ssh, building]
     steps:
       - name: deploy
         run: |
-          screen -r crowdedRegion
-          cd ~/CrowdedRegionControl/CrowdedBackend/CrowdedBackend && dotnet run
+          SESSION_NAME="crowdedRegion"
+
+          if screen -list | grep -q "$SESSION_NAME"; then
+           echo "Killing existing screen session: $SESSION_NAME"
+           screen -S "$SESSION_NAME" -X quit
+          fi
+
+          echo "Starting new screen session: $SESSION_NAME"
+          screen -dmS "$SESSION_NAME" bash -c 'cd ~/CrowdedRegionControl/CrowdedBackend/CrowdedBackend && dotnet run'
