@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 public class CircleUtils
 {
-    private const double RSSI_TO_LENGTH = 0.1; 
+    private const double RSSI_TO_LENGTH = 0.1;
     private const double CIRCLE_EXTRA_SIZE = 2.0;
     private const double SMALL = 1e-10;
 
@@ -23,7 +23,7 @@ public class CircleUtils
             this.raspOutputData.Add(raspInput);
             this.raspPoints.Add(raspPoint);
         }
-        
+
         return raspOutputData.Count;
     }
 
@@ -64,11 +64,11 @@ public class CircleUtils
 
             return points;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Console.WriteLine(e);
         }
-        
+
         return null;
     }
 
@@ -87,7 +87,7 @@ public class CircleUtils
         {
             throw new Exception("No inner points in area");
         }
-        
+
         return GetCenter(innerPoints);
     }
 
@@ -126,7 +126,7 @@ public class CircleUtils
         return Distance(new Point(c1.X, c1.Y), new Point(c2.X, c2.Y));
     }
 
-    public  List<Point> CircleCircleIntersection(Circle c1, Circle c2)
+    public List<Point> CircleCircleIntersection(Circle c1, Circle c2)
     {
         var d = Distance(c1, c2);
         var r1 = c1.Radius;

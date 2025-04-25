@@ -54,10 +54,10 @@ public class HeatmapGenerator
         var converted = Convert.ToBase64String(image.Bytes);
 
         Console.WriteLine($"Saved: {filename}");
-        
+
         // Cleanup
         File.Delete(filename);
-        
+
         return converted;
     }
 
@@ -112,7 +112,7 @@ public class HeatmapGenerator
             canvas.DrawCircle(px, py, radius - 2, paint);
         }
     }
-    
+
     private static double[,] Compute2DKDE(List<(float x, float y)> points)
     {
         double bandwidth = 0.8; // adjust for blur/sharpness

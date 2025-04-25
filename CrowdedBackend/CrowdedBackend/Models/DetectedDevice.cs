@@ -20,5 +20,5 @@ public class DetectedDevice
     public long timestamp { get; set; }
 
     // Navigation property
-    public Venue? Venue { get; set; } 
+    public Venue? Venue { get; set; }
 }

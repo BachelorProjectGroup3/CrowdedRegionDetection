@@ -14,7 +14,6 @@ namespace CrowdedBackend.Controllers
         private readonly MyDbContext _context;
         private readonly ILogger<DetectedDevicesController> _logger;
         private DetectedDeviceHelper _detectedDevicesHelper;
-        
         public DetectedDevicesController(MyDbContext context, ILogger<DetectedDevicesController> logger)
         {
             _context = context;
@@ -28,7 +27,6 @@ namespace CrowdedBackend.Controllers
         {
             return await _context.DetectedDevice.ToListAsync();
         }
-
         // GET: api/DetectedDevices/getHeatmapAtSpecificTime/17891909
         [HttpGet("getHeatmapAtSpecificTime/{timestamp}")]
         public async Task<ActionResult<String>> GetDetectedDevice(int timestamp)
@@ -36,16 +34,16 @@ namespace CrowdedBackend.Controllers
             // TODO: We should find the closest timestamp to the given
             var detectedDevices = await _context.DetectedDevice
                 .Where(d => d.timestamp.Equals(timestamp)).ToListAsync();
-   
+
             if (detectedDevices.IsNullOrEmpty())
             {
                 return NotFound();
             }
-            
+
             List<(float x, float y)> listOfDeviceLocations = [];
             foreach (var detectedDevice in detectedDevices)
             {
-                listOfDeviceLocations.Add(((float) detectedDevice.deviceX,(float) detectedDevice.deviceY));
+                listOfDeviceLocations.Add(((float)detectedDevice.deviceX, (float)detectedDevice.deviceY));
             }
 
             Venue venue = detectedDevices[0].Venue;
@@ -54,9 +52,9 @@ namespace CrowdedBackend.Controllers
 
             foreach (var rasp in venue.RaspberryPis)
             {
-                raspLocations.Add(((float) rasp.raspX, (float) rasp.raspY));
+                raspLocations.Add(((float)rasp.raspX, (float)rasp.raspY));
             }
-            
+
             String heatmapBase64Encoded = HeatmapGenerator.Generate(venue.VenueName, raspLocations, listOfDeviceLocations);
 
             return heatmapBase64Encoded;
@@ -100,7 +98,7 @@ namespace CrowdedBackend.Controllers
         {
             _context.DetectedDevice.Add(detectedDevice);
             await _context.SaveChangesAsync();
-        
+
             return CreatedAtAction("GetDetectedDevice", new { id = detectedDevice.detectedDeviceId }, detectedDevice);
         }
 
@@ -112,7 +110,7 @@ namespace CrowdedBackend.Controllers
             long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
             await this._detectedDevicesHelper.handleRaspPostRequest(raspOutputData, now);
-            
+
             return CreatedAtAction("GetDetectedDevice", new { timestamp = now });
         }
 

@@ -9,43 +9,43 @@ namespace CrowdedBackend.Helpers;
 
 public class DetectedDeviceHelper
 {
-    
+
     private readonly MyDbContext _context;
     private CircleUtils _circleUtils;
-    
+
     public DetectedDeviceHelper(MyDbContext context, CircleUtils circleUtils)
     {
         this._context = context;
         this._circleUtils = circleUtils;
     }
-    
+
     public async Task<RaspOutputData> handleRaspPostRequest(RaspOutputData raspOutputData, long now)
     {
         try
         {
             var raspberryPi = await _context.RaspberryPi.FindAsync(raspOutputData.Id);
-        
+
             Console.WriteLine($"This is raspberryPi: {raspberryPi}");
-        
+
             if (raspberryPi == null)
             {
-                throw new HttpRequestException(HttpRequestError.Unknown,message: "Raspberry Pi not found", statusCode: HttpStatusCode.InternalServerError);
+                throw new HttpRequestException(HttpRequestError.Unknown, message: "Raspberry Pi not found", statusCode: HttpStatusCode.InternalServerError);
             }
-            
+
             foreach (var raspEvent in raspOutputData.Events)
             {
                 await PostRaspData(new RaspData
                 {
-                    MacAddress = raspEvent.MacAddress, 
-                    raspId = raspberryPi.RaspberryPiID, 
+                    MacAddress = raspEvent.MacAddress,
+                    raspId = raspberryPi.RaspberryPiID,
                     Rssi = raspEvent.Rssi,
                     UnixTimestamp = now
                 });
             }
-            
+
             // Test random MacAddress and see if there are 3??
             var foundDevices = _context.RaspData.Where(d => d.MacAddress == raspOutputData.Events[0].MacAddress);
-            
+
             if (foundDevices.Count() == 3)
             {
                 var foundDeviceslist = await foundDevices.ToListAsync();
@@ -55,36 +55,36 @@ public class DetectedDeviceHelper
                     var raspSpecificEvents = await _context.RaspData
                         .Where(rasp => rasp.raspId == device.raspId)
                         .ToListAsync();
-                    
+
                     var eventList = new List<RaspEvent>();
 
                     foreach (var raspEvent in raspSpecificEvents)
                     {
-                        eventList.Add(new RaspEvent{MacAddress = raspEvent.MacAddress, Rssi = raspEvent.Rssi, UnixTimestamp = now});
+                        eventList.Add(new RaspEvent { MacAddress = raspEvent.MacAddress, Rssi = raspEvent.Rssi, UnixTimestamp = now });
                     }
 
                     var rasp = await _context.RaspberryPi.FindAsync(device.raspId);
 
                     if (rasp == null)
                     {
-                        throw new HttpRequestException(HttpRequestError.Unknown,message: "Failed to find raspberryPi in raw data table", statusCode: HttpStatusCode.InternalServerError);
+                        throw new HttpRequestException(HttpRequestError.Unknown, message: "Failed to find raspberryPi in raw data table", statusCode: HttpStatusCode.InternalServerError);
                     }
-                    
-                    _circleUtils.addData(new RaspOutputData{Events = eventList}, new Point(rasp.raspX, rasp.raspY));
+
+                    _circleUtils.addData(new RaspOutputData { Events = eventList }, new Point(rasp.raspX, rasp.raspY));
                 }
-                
+
                 var points = _circleUtils.CalculatePosition();
                 Console.WriteLine(points);
                 Console.WriteLine(points.Count);
                 foreach (var point in points)
                 {
-                    _context.Add(new DetectedDevice{venueID = raspberryPi.VenueID, deviceX = point.X, deviceY = point.Y, timestamp = now});
+                    _context.Add(new DetectedDevice { venueID = raspberryPi.VenueID, deviceX = point.X, deviceY = point.Y, timestamp = now });
                     Console.WriteLine("dfakosdflskjdlfkjsdkl");
-                    Console.WriteLine(new DetectedDevice{venueID = raspberryPi.VenueID, deviceX = point.X, deviceY = point.Y, timestamp = now});
+                    Console.WriteLine(new DetectedDevice { venueID = raspberryPi.VenueID, deviceX = point.X, deviceY = point.Y, timestamp = now });
                 }
-                
+
                 Console.WriteLine(_context);
-                
+
                 await _context.SaveChangesAsync();
                 _circleUtils.wipeData();
             }
@@ -95,10 +95,10 @@ public class DetectedDeviceHelper
             Console.WriteLine(e);
             throw;
         }
-        
+
         return raspOutputData;
     }
-    
+
     public async Task<RaspData> PostRaspData(RaspData raspData)
     {
         _context.RaspData.Add(raspData);
