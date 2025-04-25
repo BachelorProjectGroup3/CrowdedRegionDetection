@@ -20,7 +20,7 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore
-        working-directory: ../../CrowdedBackend
+        working-directory: .
 
       - name: Run dotnet format check
         run: dotnet format CrowdedBackend.sln --verify-no-changes --verbosity diagnostic
