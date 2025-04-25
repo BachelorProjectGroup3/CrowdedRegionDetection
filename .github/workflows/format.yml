@@ -1,0 +1,27 @@
+name: Check Code Formatting
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+
+jobs:
+  format-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.2' 
+
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: ../../CrowdedBackend
+
+      - name: Run dotnet format check
+        run: dotnet format CrowdedBackend.sln --verify-no-changes --verbosity diagnostic
+        working-directory: .
