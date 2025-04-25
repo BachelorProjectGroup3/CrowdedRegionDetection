@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CrowdedBackend.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20250422084725_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250423102145_InitialMigrationCrowdedRegion")]
+    partial class InitialMigrationCrowdedRegion
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,7 +53,14 @@ namespace CrowdedBackend.Migrations
 
             modelBuilder.Entity("CrowdedBackend.Models.RaspData", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
                     b.Property<string>("MacAddress")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Rssi")
@@ -65,7 +72,7 @@ namespace CrowdedBackend.Migrations
                     b.Property<int>("raspId")
                         .HasColumnType("integer");
 
-                    b.HasKey("MacAddress");
+                    b.HasKey("Id");
 
                     b.ToTable("RaspData");
                 });

@@ -98,6 +98,21 @@ namespace CrowdedBackend.Controllers
 
             return NoContent();
         }
+        
+        // DELETE: api/RaspData
+        [HttpDelete]
+        public async Task<IActionResult> WipeRaspData()
+        {
+            var raspData = _context.RaspData.Where(i => true);
+
+            foreach (var rasp in raspData)
+            {
+                _context.RaspData.Remove(rasp);
+            }
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
 
         private bool RaspDataExists(int id)
         {

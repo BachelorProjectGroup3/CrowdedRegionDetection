@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CrowdedBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialMigrationCrowdedRegion : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,6 +15,8 @@ namespace CrowdedBackend.Migrations
                 name: "RaspData",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     MacAddress = table.Column<string>(type: "text", nullable: false),
                     raspId = table.Column<int>(type: "integer", nullable: false),
                     Rssi = table.Column<int>(type: "integer", nullable: false),
@@ -22,7 +24,7 @@ namespace CrowdedBackend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RaspData", x => x.MacAddress);
+                    table.PrimaryKey("PK_RaspData", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(

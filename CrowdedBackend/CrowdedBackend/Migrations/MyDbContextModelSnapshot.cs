@@ -50,7 +50,14 @@ namespace CrowdedBackend.Migrations
 
             modelBuilder.Entity("CrowdedBackend.Models.RaspData", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
                     b.Property<string>("MacAddress")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Rssi")
@@ -62,7 +69,7 @@ namespace CrowdedBackend.Migrations
                     b.Property<int>("raspId")
                         .HasColumnType("integer");
 
-                    b.HasKey("MacAddress");
+                    b.HasKey("Id");
 
                     b.ToTable("RaspData");
                 });
