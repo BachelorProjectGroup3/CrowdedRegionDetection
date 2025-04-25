@@ -1,4 +1,6 @@
-namespace CrowdedBackend.Services.CalculatePositions;
+using CrowdedBackend.Services.CalculatePositions;
+
+namespace CrowdedBackend.Models;
 using System.Text.Json.Serialization;
 
 public class RaspOutputData

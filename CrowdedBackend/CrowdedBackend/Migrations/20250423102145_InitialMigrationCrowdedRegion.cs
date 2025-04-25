@@ -6,11 +6,27 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CrowdedBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialMigrationCrowdedRegion : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "RaspData",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    MacAddress = table.Column<string>(type: "text", nullable: false),
+                    raspId = table.Column<int>(type: "integer", nullable: false),
+                    Rssi = table.Column<int>(type: "integer", nullable: false),
+                    UnixTimestamp = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RaspData", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Venue",
                 columns: table => new
@@ -86,6 +102,9 @@ namespace CrowdedBackend.Migrations
 
             migrationBuilder.DropTable(
                 name: "RaspberryPi");
+
+            migrationBuilder.DropTable(
+                name: "RaspData");
 
             migrationBuilder.DropTable(
                 name: "Venue");
