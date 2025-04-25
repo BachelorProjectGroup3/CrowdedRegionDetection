@@ -19,7 +19,7 @@ public class DetectedDeviceHelper
         this._circleUtils = circleUtils;
     }
 
-    public async Task<RaspOutputData> handleRaspPostRequest(RaspOutputData raspOutputData, long now)
+    public async Task<RaspOutputData> HandleRaspPostRequest(RaspOutputData raspOutputData, long now)
     {
         try
         {

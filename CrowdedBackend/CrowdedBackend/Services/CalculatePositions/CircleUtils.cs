@@ -16,7 +16,7 @@ public class CircleUtils
     private List<RaspOutputData?> raspOutputData = new List<RaspOutputData?>();
     private List<Point> raspPoints = new List<Point>();
 
-    public int addData(RaspOutputData raspInput, Point raspPoint)
+    public int AddData(RaspOutputData raspInput, Point raspPoint)
     {
         if (raspOutputData.Count < 3)
         {
@@ -27,7 +27,7 @@ public class CircleUtils
         return raspOutputData.Count;
     }
 
-    public void wipeData()
+    public void WipeData()
     {
         this.raspOutputData = new List<RaspOutputData?>();
         this.raspPoints = new List<Point>();

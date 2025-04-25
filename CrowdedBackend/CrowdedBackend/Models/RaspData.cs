@@ -12,7 +12,7 @@ public class RaspData
     public required string MacAddress { get; set; }
 
     [ForeignKey("RaspberryPi")]
-    public required int raspId { get; set; }
+    public required int RaspId { get; set; }
 
     public required int Rssi { get; set; }
 
