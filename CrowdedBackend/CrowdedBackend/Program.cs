@@ -16,7 +16,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddHttpLogging(logging => {
+builder.Services.AddHttpLogging(logging =>
+{
     logging.LoggingFields = HttpLoggingFields.All;
     logging.RequestHeaders.Add("Referer");
     logging.ResponseHeaders.Add("MyCustomResponseHeader");

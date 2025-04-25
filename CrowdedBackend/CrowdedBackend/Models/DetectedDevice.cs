@@ -8,17 +8,17 @@ public class DetectedDevice
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int detectedDeviceId { get; set; }
+    public int DetectedDeviceId { get; set; }
 
     [ForeignKey("Venue")]
-    public int venueID { get; set; }
+    public int VenueID { get; set; }
 
-    public double deviceX { get; set; }
-    public double deviceY { get; set; }
+    public double DeviceX { get; set; }
+    public double DeviceY { get; set; }
 
     [Required]
-    public long timestamp { get; set; }
+    public long Timestamp { get; set; }
 
     // Navigation property
-    public Venue? Venue { get; set; } 
+    public Venue? Venue { get; set; }
 }
