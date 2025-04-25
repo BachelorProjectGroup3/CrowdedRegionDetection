@@ -1,16 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using CrowdedBackend.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CrowdedBackend.Models;
 using CrowdedBackend.Services.CalculatePositions;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.IdentityModel.Tokens;
-using NuGet.Protocol;
 
 namespace CrowdedBackend.Controllers
 {
@@ -19,15 +12,14 @@ namespace CrowdedBackend.Controllers
     public class DetectedDevicesController : ControllerBase
     {
         private readonly MyDbContext _context;
-        private CircleUtils circleUtils;
         private readonly ILogger<DetectedDevicesController> _logger;
-
-
+        private DetectedDeviceHelper _detectedDevicesHelper;
+        
         public DetectedDevicesController(MyDbContext context, ILogger<DetectedDevicesController> logger)
         {
             _context = context;
-            circleUtils = new CircleUtils();
             _logger = logger;
+            _detectedDevicesHelper = new DetectedDeviceHelper(_context, new CircleUtils());
         }
 
         // GET: api/DetectedDevices
@@ -119,27 +111,7 @@ namespace CrowdedBackend.Controllers
         {
             long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-            Console.WriteLine(raspOutputData.ToJson());
-            
-            var raspberryPi = await _context.RaspberryPi.FindAsync(raspOutputData.Id);
-            
-            if (raspberryPi == null)
-            {
-                return Problem("Raspberry Pi not found", statusCode: 500);
-            }
-            
-            if (circleUtils.addData(raspOutputData, new Point(raspberryPi.raspX, raspberryPi.raspY)) == 3)
-            {
-                var points = circleUtils.CalculatePosition();
-                foreach (var point in points)
-                {
-                    _context.Add(new DetectedDevice{venueID = raspberryPi.VenueID, deviceX = point.X, deviceY = point.Y, timestamp = now});
-
-                }
-                
-                await _context.SaveChangesAsync();
-                circleUtils.wipeData();
-            }
+            await this._detectedDevicesHelper.handleRaspPostRequest(raspOutputData, now);
             
             return CreatedAtAction("GetDetectedDevice", new { timestamp = now });
         }

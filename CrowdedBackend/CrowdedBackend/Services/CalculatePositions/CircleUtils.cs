@@ -1,3 +1,5 @@
+using CrowdedBackend.Models;
+
 namespace CrowdedBackend.Services.CalculatePositions;
 
 using System;
@@ -7,7 +9,7 @@ using Newtonsoft.Json;
 
 public class CircleUtils
 {
-    private const double RSSI_TO_LENGTH = 2.0; 
+    private const double RSSI_TO_LENGTH = 0.1; 
     private const double CIRCLE_EXTRA_SIZE = 2.0;
     private const double SMALL = 1e-10;
 
@@ -73,7 +75,7 @@ public class CircleUtils
     private double RSSIToLength(double rssi)
     {
         // TODO:Actually calculate
-        return rssi + RSSI_TO_LENGTH + CIRCLE_EXTRA_SIZE;
+        return -rssi * RSSI_TO_LENGTH + CIRCLE_EXTRA_SIZE;
     }
 
     private Point EstimatedPoint(List<Circle> circles)
