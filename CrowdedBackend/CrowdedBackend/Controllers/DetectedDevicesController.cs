@@ -12,7 +12,7 @@ namespace CrowdedBackend.Controllers
     public class DetectedDevicesController : ControllerBase
     {
         private readonly MyDbContext _context;
-        private readonly ILogger<DetectedDevicesController> _logger;
+        //private readonly ILogger<DetectedDevicesController> _logger; // Not used?
         private DetectedDeviceHelper _detectedDevicesHelper;
         public DetectedDevicesController(MyDbContext context, ILogger<DetectedDevicesController> logger)
         {
