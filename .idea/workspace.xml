@@ -19,7 +19,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Controllers/DetectedDevicesController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Controllers/RaspDataController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Controllers/RaspDataController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Controllers/RaspberryPiController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Helpers/DetectedDeviceHelper.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Migrations/20250423102145_InitialMigrationCrowdedRegion.Designer.cs" root0="SKIP_HIGHLIGHTING" />

@@ -23,5 +23,5 @@ jobs:
         working-directory: ./CrowdedBackend
 
       - name: Run dotnet format check
-        run: dotnet format CrowdedBackend.sln --verify-no-changes --verbosity diagnostic warn
+        run: dotnet format CrowdedBackend.sln --verify-no-changes --verbosity diagnostic
         working-directory: ./CrowdedBackend
