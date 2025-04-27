@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a736751a-03be-4123-a9fe-89efc4385221" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/format.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/format.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CrowdedBackend/.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/CrowdedBackend/.editorconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Controllers/DetectedDevicesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Controllers/DetectedDevicesController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Helpers/DetectedDeviceHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Helpers/DetectedDeviceHelper.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +38,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "git-widget-placeholder": "CRO-68/linting",
+    "git-widget-placeholder": "CRO-69/test",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
