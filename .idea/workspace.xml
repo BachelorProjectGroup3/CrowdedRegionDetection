@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a736751a-03be-4123-a9fe-89efc4385221" name="Changes" comment="" />
+    <list default="true" id="a736751a-03be-4123-a9fe-89efc4385221" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/format.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/format.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CrowdedBackend/.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/CrowdedBackend/.editorconfig" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -12,6 +16,25 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Controllers/DetectedDevicesController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Controllers/RaspDataController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Controllers/RaspberryPiController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Helpers/DetectedDeviceHelper.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Migrations/20250423102145_InitialMigrationCrowdedRegion.Designer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Migrations/20250423102145_InitialMigrationCrowdedRegion.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Migrations/MyDbContextModelSnapshot.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Models/DbContext.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Models/DetectedDevice.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Models/RaspData.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Models/RaspberryPi.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Program.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Services/CalculatePositions/Circle.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CrowdedBackend/CrowdedBackend/Services/CalculatePositions/CircleUtils.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
