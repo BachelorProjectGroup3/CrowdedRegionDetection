@@ -12,7 +12,7 @@ namespace CrowdedBackend.Controllers
     public class DetectedDevicesController : ControllerBase
     {
         private readonly MyDbContext _context;
-        private readonly ILogger<DetectedDevicesController> _logger;
+        //private readonly ILogger<DetectedDevicesController> _logger; // Not used?
         private DetectedDeviceHelper _detectedDevicesHelper;
         public DetectedDevicesController(MyDbContext context, ILogger<DetectedDevicesController> logger)
         {
@@ -33,7 +33,7 @@ namespace CrowdedBackend.Controllers
         {
             // TODO: We should find the closest timestamp to the given
             var detectedDevices = await _context.DetectedDevice
-                .Where(d => d.timestamp.Equals(timestamp)).ToListAsync();
+                .Where(d => d.Timestamp.Equals(timestamp)).ToListAsync();
 
             if (detectedDevices.IsNullOrEmpty())
             {
@@ -43,7 +43,7 @@ namespace CrowdedBackend.Controllers
             List<(float x, float y)> listOfDeviceLocations = [];
             foreach (var detectedDevice in detectedDevices)
             {
-                listOfDeviceLocations.Add(((float)detectedDevice.deviceX, (float)detectedDevice.deviceY));
+                listOfDeviceLocations.Add(((float)detectedDevice.DeviceX, (float)detectedDevice.DeviceY));
             }
 
             Venue venue = detectedDevices[0].Venue;
@@ -52,7 +52,7 @@ namespace CrowdedBackend.Controllers
 
             foreach (var rasp in venue.RaspberryPis)
             {
-                raspLocations.Add(((float)rasp.raspX, (float)rasp.raspY));
+                raspLocations.Add(((float)rasp.RaspX, (float)rasp.RaspY));
             }
 
             String heatmapBase64Encoded = HeatmapGenerator.Generate(venue.VenueName, raspLocations, listOfDeviceLocations);
@@ -65,7 +65,7 @@ namespace CrowdedBackend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDetectedDevice(int id, DetectedDevice detectedDevice)
         {
-            if (id != detectedDevice.detectedDeviceId)
+            if (id != detectedDevice.DetectedDeviceId)
             {
                 return BadRequest();
             }
@@ -99,7 +99,7 @@ namespace CrowdedBackend.Controllers
             _context.DetectedDevice.Add(detectedDevice);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDetectedDevice", new { id = detectedDevice.detectedDeviceId }, detectedDevice);
+            return CreatedAtAction("GetDetectedDevice", new { id = detectedDevice.DetectedDeviceId }, detectedDevice);
         }
 
         // POST: api/DetectedDevices/uploadMultiple
@@ -109,7 +109,7 @@ namespace CrowdedBackend.Controllers
         {
             long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-            await this._detectedDevicesHelper.handleRaspPostRequest(raspOutputData, now);
+            await this._detectedDevicesHelper.HandleRaspPostRequest(raspOutputData, now);
 
             return CreatedAtAction("GetDetectedDevice", new { timestamp = now });
         }
@@ -132,7 +132,7 @@ namespace CrowdedBackend.Controllers
 
         private bool DetectedDeviceExists(int id)
         {
-            return _context.DetectedDevice.Any(e => e.detectedDeviceId == id);
+            return _context.DetectedDevice.Any(e => e.DetectedDeviceId == id);
         }
 
     }
