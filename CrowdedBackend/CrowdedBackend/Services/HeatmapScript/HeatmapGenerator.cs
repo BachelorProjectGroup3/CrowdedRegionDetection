@@ -20,8 +20,9 @@ public class HeatmapGenerator
 
     public static String Generate(string venueName, List<(float x, float y)> raspberryPiPositions, List<(float x, float y)> peoplePositions)
     {
-        string currentDirectory = Directory.GetCurrentDirectory();
-        var backgroundPath = Path.Combine(currentDirectory, venueName);
+        string currentDirectory = Directory.GetCurrentDirectory() + "/Services/HeatmapScript/";
+        var backgroundPath = Path.Combine(currentDirectory, venueName) + ".png";
+        Console.WriteLine(backgroundPath);
 
         var image = new SKBitmap(ImageSize, ImageSize);
         using var canvas = new SKCanvas(image);
