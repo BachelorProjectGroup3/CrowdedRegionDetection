@@ -11,6 +11,7 @@ namespace CrowdedBackend.Controllers
     [ApiController]
     public class DetectedDevicesController : ControllerBase
     {
+        private const long TimeInterval = 5 * 60 * 1000;
         private readonly MyDbContext _context;
         private readonly ILogger<DetectedDevicesController> _logger; // Not used?
         private DetectedDeviceHelper _detectedDevicesHelper;
@@ -32,7 +33,9 @@ namespace CrowdedBackend.Controllers
         [HttpGet("getHeatmapAtSpecificTime/{timestamp}")]
         public async Task<ActionResult<String>> GetDetectedDevice(long timestamp)
         {
-            // TODO: We should find the closest timestamp to the given
+            // Don't record anything not in x min intervals
+            timestamp -= (timestamp % TimeInterval);
+            
             var detectedDevices = await _context.DetectedDevice
                 .Where(d => d.Timestamp.Equals(timestamp))
                 .ToListAsync();
@@ -47,8 +50,6 @@ namespace CrowdedBackend.Controllers
             {
                 listOfDeviceLocations.Add(((float)detectedDevice.DeviceX, (float)detectedDevice.DeviceY));
             }
-            
-            
 
             Venue? venue = _context.Venue
                 .Where(d => d.VenueID.Equals(detectedDevices[0].VenueID))
@@ -120,6 +121,9 @@ namespace CrowdedBackend.Controllers
         public async Task<ActionResult<DetectedDevice>> PostDetectedDevices(RaspOutputData raspOutputData)
         {
             long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+            // Don't record anything not in x min intervals
+            now -= (now % TimeInterval);
 
             await this._detectedDevicesHelper.HandleRaspPostRequest(raspOutputData, now);
 
