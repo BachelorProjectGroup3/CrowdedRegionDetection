@@ -56,18 +56,11 @@ public class HeatmapGenerator
         // Overlay people positions (optional)
         DrawPoints(canvas, positionList, SKColors.Red, SKColors.DarkRed, 5);
 
-        // Save image
-        string filename = $"{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}.png";
-        using var fileStream = File.OpenWrite(filename);
-        image.Encode(SKEncodedImageFormat.Png, 100).SaveTo(fileStream);
+        using var ms = new MemoryStream();
+        image.Encode(SKEncodedImageFormat.Png, 100).SaveTo(ms);
+        var pngBytes = ms.ToArray();
 
-        var converted = Convert.ToBase64String(image.Bytes);
-
-        Console.WriteLine($"Saved: {filename}");
-
-        // Cleanup
-        File.Delete(filename);
-
+        var converted = Convert.ToBase64String(pngBytes);
         return converted;
     }
 
