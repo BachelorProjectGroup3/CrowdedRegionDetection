@@ -57,7 +57,7 @@ public class HeatmapGenerator
         Console.WriteLine($"Saved: {filename}");
 
         // Cleanup
-        File.Delete(filename);
+        // File.Delete(filename);
 
         return converted;
     }
