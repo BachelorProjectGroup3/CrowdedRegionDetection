@@ -20,6 +20,15 @@ public class HeatmapGenerator
 
     public static String Generate(string venueName, List<(float x, float y)> raspberryPiPositions, List<(float x, float y)> peoplePositions)
     {
+        List<(float x, float y)> positionList = new List<(float x, float y)>();
+        foreach (var position in peoplePositions)
+        {
+            positionList.Add((float.Round(position.x), float.Round(position.y)));
+            Console.WriteLine(position.x);
+            Console.WriteLine(position.y);
+        }
+        Console.WriteLine(positionList.Count);
+        
         string currentDirectory = Directory.GetCurrentDirectory() + "/Services/HeatmapScript/";
         var backgroundPath = Path.Combine(currentDirectory, venueName) + ".png";
         Console.WriteLine(backgroundPath);
@@ -45,7 +54,7 @@ public class HeatmapGenerator
         DrawPoints(canvas, raspberryPiPositions, SKColors.White, SKColors.Black, 10);
 
         // Overlay people positions (optional)
-        // DrawPoints(canvas, peoplePositions, SKColors.Red, SKColors.DarkRed, 5);
+        DrawPoints(canvas, positionList, SKColors.Red, SKColors.DarkRed, 5);
 
         // Save image
         string filename = $"{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}.png";
@@ -57,7 +66,7 @@ public class HeatmapGenerator
         Console.WriteLine($"Saved: {filename}");
 
         // Cleanup
-        // File.Delete(filename);
+        File.Delete(filename);
 
         return converted;
     }
