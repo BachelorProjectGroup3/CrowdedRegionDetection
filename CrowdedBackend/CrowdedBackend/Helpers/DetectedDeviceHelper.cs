@@ -74,13 +74,9 @@ public class DetectedDeviceHelper
                 }
 
                 var points = _circleUtils.CalculatePosition();
-                Console.WriteLine(points);
-                Console.WriteLine(points.Count);
                 foreach (var point in points)
                 {
                     _context.Add(new DetectedDevice { VenueID = raspberryPi.VenueID, DeviceX = point.X, DeviceY = point.Y, Timestamp = now });
-                    Console.WriteLine("dfakosdflskjdlfkjsdkl");
-                    //Console.WriteLine(new DetectedDevice { VenueID = RaspberryPi.VenueID, DeviceX = point.X, DeviceY = point.Y, Timestamp = now });
                 }
 
                 Console.WriteLine(_context);
