@@ -7,3 +7,5 @@
 /CrowdedBackend/CrowdedBackend/CrowdedBackend.http
 /CrowdedBackend/CrowdedBackend/Properties/launchSettings.json
 /CrowdedBackend/CrowdedBackend/.config/
+/CrowdedBackend/CrowdedBackend.Tests/bin/
+/CrowdedBackend/CrowdedBackend.Tests/obj/
