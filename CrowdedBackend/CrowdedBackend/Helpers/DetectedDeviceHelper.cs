@@ -2,6 +2,7 @@ using System.Data;
 using System.Net;
 using CrowdedBackend.Models;
 using CrowdedBackend.Services.CalculatePositions;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -82,6 +83,7 @@ public class DetectedDeviceHelper
 
                 await _context.SaveChangesAsync();
                 _circleUtils.WipeData();
+                await this.WipeRaspData();
             }
 
         }
@@ -97,6 +99,19 @@ public class DetectedDeviceHelper
     public async Task<RaspData> PostRaspData(RaspData raspData)
     {
         _context.RaspData.Add(raspData);
+        await _context.SaveChangesAsync();
+
+        return raspData;
+    }
+
+    public async Task<IQueryable<RaspData>> WipeRaspData()
+    {
+        var raspData = _context.RaspData.Where(i => true);
+
+        foreach (var rasp in raspData)
+        {
+            _context.RaspData.Remove(rasp);
+        }
         await _context.SaveChangesAsync();
 
         return raspData;
