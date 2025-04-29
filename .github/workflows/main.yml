@@ -65,4 +65,4 @@ jobs:
           fi
 
           echo "Starting new screen session: $SESSION_NAME"
-          screen -dmS "$SESSION_NAME" bash -c "cd /home/ubuntu/CrowdedRegionControl/CrowdedBackend/CrowdedBackend && dotnet run  > ~/screen.log 2>&1"
+          screen -dmS "$SESSION_NAME" ~/runscript.sh
