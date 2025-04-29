@@ -28,7 +28,7 @@ public class HeatmapGenerator
             Console.WriteLine(position.y);
         }
         Console.WriteLine(positionList.Count);
-        
+
         string currentDirectory = Directory.GetCurrentDirectory() + "/Services/HeatmapScript/";
         var backgroundPath = Path.Combine(currentDirectory, venueName) + ".png";
         Console.WriteLine(backgroundPath);

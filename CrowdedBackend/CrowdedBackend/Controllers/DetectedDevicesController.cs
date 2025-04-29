@@ -35,11 +35,11 @@ namespace CrowdedBackend.Controllers
         {
             // Don't record anything not in x min intervals
             timestamp -= (timestamp % TimeInterval);
-            
+
             var detectedDevices = await _context.DetectedDevice
                 .Where(d => d.Timestamp.Equals(timestamp))
                 .ToListAsync();
-            
+
             if (detectedDevices.IsNullOrEmpty())
             {
                 return Problem("Detected devices is null or empty", statusCode: 500);
@@ -55,7 +55,7 @@ namespace CrowdedBackend.Controllers
                 .Where(d => d.VenueID.Equals(detectedDevices[0].VenueID))
                 .Include(v => v.RaspberryPis)
                 .FirstOrDefault();
-            
+
             if (venue == null)
             {
                 return Problem("Venue in detected device is null", statusCode: 500);
