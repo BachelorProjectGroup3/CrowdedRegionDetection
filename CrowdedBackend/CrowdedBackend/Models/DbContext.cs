@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using CrowdedBackend.Models;
 
 namespace CrowdedBackend.Models;
 
