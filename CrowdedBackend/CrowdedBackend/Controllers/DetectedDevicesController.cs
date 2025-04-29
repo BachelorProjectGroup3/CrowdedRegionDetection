@@ -13,12 +13,10 @@ namespace CrowdedBackend.Controllers
     {
         private const long TimeInterval = 5 * 60 * 1000;
         private readonly MyDbContext _context;
-        private readonly ILogger<DetectedDevicesController> _logger; // Not used?
         private DetectedDeviceHelper _detectedDevicesHelper;
-        public DetectedDevicesController(MyDbContext context, ILogger<DetectedDevicesController> logger)
+        public DetectedDevicesController(MyDbContext context)
         {
             _context = context;
-            _logger = logger;
             _detectedDevicesHelper = new DetectedDeviceHelper(_context, new CircleUtils());
         }
 
