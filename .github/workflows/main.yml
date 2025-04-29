@@ -56,6 +56,8 @@ jobs:
         run: |
           SESSION_NAME="crowdedRegion"
 
+          screen -wipe
+
           if screen -list | grep -q "$SESSION_NAME"; then
            echo "Killing existing screen session: $SESSION_NAME"
            screen -S "$SESSION_NAME" -X quit
