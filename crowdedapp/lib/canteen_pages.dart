@@ -57,7 +57,7 @@ Future<Image?> fetchHeatmapImage(int timestamp) async {
               child: Center(
                 child: Container(
                   width: 500,
-                  height: 500,
+                  height: 400,
                   color: Colors.grey[300],
                   child: FutureBuilder<Image?>(
                     future: fetchHeatmapImage(1745916000000), // Replace with your timestamp
