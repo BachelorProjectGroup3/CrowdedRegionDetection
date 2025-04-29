@@ -38,6 +38,7 @@ dependencies:
   http: ^1.3.0
 
 dev_dependencies:
+  mockito: ^5.4.4
   flutter_test:
     sdk: flutter
 
