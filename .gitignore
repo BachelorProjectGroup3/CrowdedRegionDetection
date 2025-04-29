@@ -10,3 +10,5 @@
 /CrowdedBackend/CrowdedBackend.Tests/bin/
 /CrowdedBackend/CrowdedBackend.Tests/obj/
 /idea/
+**/.idea/workspace.xml 
+**/.idea/tasks.xml
