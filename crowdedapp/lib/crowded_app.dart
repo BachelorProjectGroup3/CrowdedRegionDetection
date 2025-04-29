@@ -14,8 +14,7 @@ class _CrowdedappState extends State<Crowdedapp> {
   int _currentIndex = 0;
   final List<Widget> _pages = [
     Home(),
-    CanteenPage(title: 'Canteen 1 View'),
-    CanteenPage(title: 'Canteen 2 View'),
+    CanteenPage(title: 'Canteen View'),
   ];
 
   void _onItemTapped(int index) {
@@ -38,8 +37,7 @@ class _CrowdedappState extends State<Crowdedapp> {
           unselectedItemColor: Colors.white,
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-            BottomNavigationBarItem(icon: Icon(Icons.restaurant), label: "Canteen 1"),
-            BottomNavigationBarItem(icon: Icon(Icons.restaurant_menu), label: "Canteen 2"),
+            BottomNavigationBarItem(icon: Icon(Icons.restaurant), label: "Canteen"),
           ],
         ),
       ),
