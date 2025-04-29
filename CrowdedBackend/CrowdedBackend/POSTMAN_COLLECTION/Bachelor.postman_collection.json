@@ -1,0 +1,285 @@
+{
+	"info": {
+		"_postman_id": "0d367e4d-9dcc-4e24-82c4-a2b1b068fc5e",
+		"name": "Bachelor",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30977792",
+		"_collection_link": "https://blue-comet-52149.postman.co/workspace/Team-Workspace~63b42646-b77c-4ec2-8b3e-7969a0aa830a/collection/30977792-0d367e4d-9dcc-4e24-82c4-a2b1b068fc5e?action=share&source=collection_link&creator=30977792"
+	},
+	"item": [
+		{
+			"name": "ServerTest",
+			"item": [
+				{
+					"name": "UploadMultiple",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"MachineID\": \"d34afc592feb4117ac2186717cd3fb86\",\n  \"Events\": [\n    {\n      \"HeaderLine\": \"\\u003E HCI Event: LE Meta Event (0x3e) plen 31  #1 [hci0] 2025-04-14 10:29:57.404711\",\n      \"RawDetails\": [\n        \"      LE Advertising Report (0x02)\",\n        \"        Num reports: 1\",\n        \"        Event type: Connectable undirected - ADV_IND (0x00)\",\n        \"        Address type: Random (0x01)\",\n        \"        Address: 47:C1:75:A8:6E:FB (Resolvable)\",\n        \"        Data length: 19\",\n        \"        Flags: 0x1a\",\n        \"          LE General Discoverable Mode\",\n        \"          Simultaneous LE and BR/EDR (Controller)\",\n        \"          Simultaneous LE and BR/EDR (Host)\",\n        \"        TX power: 7 dBm\",\n        \"        Company: Apple, Inc. (76)\",\n        \"          Type: Unknown (16)\",\n        \"          Data: 7d1f75b9392258\",\n        \"        RSSI: -79 dBm (0xb1)\"\n      ],\n      \"EventType\": \"Connectable undirected - ADV_IND (0x00)\",\n      \"Address\": \"47:C1:75:A8:6E:FB\",\n      \"Rssi\": -79,\n      \"TxPower\": 7,\n      \"Company\": \"Apple, Inc. (76)\",\n      \"UnixTimestamp\": 1744622997\n    },\n    {\n      \"HeaderLine\": \"@ MGMT Event: De.. (0x0012) plen 29  {0x0001} [hci0] 2025-04-14 10:29:57.404766\",\n      \"RawDetails\": [\n        \"        LE Address: 70:56:81:EE:F1:04 (Apple, Inc.)\",\n        \"        RSSI: -71 dBm (0xb9)\",\n        \"        Flags: 0x00000000\",\n        \"        Data length: 15\",\n        \"        Flags: 0x1a\",\n        \"          LE General Discoverable Mode\",\n        \"          Simultaneous LE and BR/EDR (Controller)\",\n        \"          Simultaneous LE and BR/EDR (Host)\",\n        \"        Company: Apple, Inc. (76)\",\n        \"          Type: Apple TV (9)\",\n        \"          Data: 023bc0a801f4\"\n      ],\n      \"EventType\": null,\n      \"Address\": \"70:56:81:EE:F1:04\",\n      \"Rssi\": -71,\n      \"TxPower\": null,\n      \"Company\": \"Apple, Inc. (76)\",\n      \"UnixTimestamp\": 1744622997\n    },\n    {\n      \"HeaderLine\": \"\\u003E HCI Event: LE Meta Event (0x3e) plen 31  #2 [hci0] 2025-04-14 10:29:57.422163\",\n      \"RawDetails\": [\n        \"      LE Advertising Report (0x02)\",\n        \"        Num reports: 1\",\n        \"        Event type: Connectable undirected - ADV_IND (0x00)\",\n        \"        Address type: Random (0x01)\",\n        \"        Address: 5B:83:24:DE:80:6F (Resolvable)\",\n        \"        Data length: 19\",\n        \"        Flags: 0x1a\",\n        \"          LE General Discoverable Mode\",\n        \"          Simultaneous LE and BR/EDR (Controller)\",\n        \"          Simultaneous LE and BR/EDR (Host)\",\n        \"        TX power: 8 dBm\",\n        \"        Company: Apple, Inc. (76)\",\n        \"          Type: Unknown (16)\",\n        \"          Data: 7f1feaf80cbbf8\",\n        \"        RSSI: -82 dBm (0xae)\"\n      ],\n      \"EventType\": \"Connectable undirected - ADV_IND (0x00)\",\n      \"Address\": \"5B:83:24:DE:80:6F\",\n      \"Rssi\": -82,\n      \"TxPower\": 8,\n      \"Company\": \"Apple, Inc. (76)\",\n      \"UnixTimestamp\": 1744622997\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{publichost}}api/DetectedDevices/uploadMultiple",
+							"host": [
+								"{{publichost}}api"
+							],
+							"path": [
+								"DetectedDevices",
+								"uploadMultiple"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UploadMultiple Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"MachineID\": \"d34afc592feb4117ac2186717cd3fb86\",\n  \"Events\": [\n    {\n      \"HeaderLine\": \"\\u003E HCI Event: LE Meta Event (0x3e) plen 31  #1 [hci0] 2025-04-14 10:29:57.404711\",\n      \"RawDetails\": [\n        \"      LE Advertising Report (0x02)\",\n        \"        Num reports: 1\",\n        \"        Event type: Connectable undirected - ADV_IND (0x00)\",\n        \"        Address type: Random (0x01)\",\n        \"        Address: 47:C1:75:A8:6E:FB (Resolvable)\",\n        \"        Data length: 19\",\n        \"        Flags: 0x1a\",\n        \"          LE General Discoverable Mode\",\n        \"          Simultaneous LE and BR/EDR (Controller)\",\n        \"          Simultaneous LE and BR/EDR (Host)\",\n        \"        TX power: 7 dBm\",\n        \"        Company: Apple, Inc. (76)\",\n        \"          Type: Unknown (16)\",\n        \"          Data: 7d1f75b9392258\",\n        \"        RSSI: -79 dBm (0xb1)\"\n      ],\n      \"EventType\": \"Connectable undirected - ADV_IND (0x00)\",\n      \"Address\": \"47:C1:75:A8:6E:FB\",\n      \"Rssi\": -79,\n      \"TxPower\": 7,\n      \"Company\": \"Apple, Inc. (76)\",\n      \"UnixTimestamp\": 1744622997\n    },\n    {\n      \"HeaderLine\": \"@ MGMT Event: De.. (0x0012) plen 29  {0x0001} [hci0] 2025-04-14 10:29:57.404766\",\n      \"RawDetails\": [\n        \"        LE Address: 70:56:81:EE:F1:04 (Apple, Inc.)\",\n        \"        RSSI: -71 dBm (0xb9)\",\n        \"        Flags: 0x00000000\",\n        \"        Data length: 15\",\n        \"        Flags: 0x1a\",\n        \"          LE General Discoverable Mode\",\n        \"          Simultaneous LE and BR/EDR (Controller)\",\n        \"          Simultaneous LE and BR/EDR (Host)\",\n        \"        Company: Apple, Inc. (76)\",\n        \"          Type: Apple TV (9)\",\n        \"          Data: 023bc0a801f4\"\n      ],\n      \"EventType\": null,\n      \"Address\": \"70:56:81:EE:F1:04\",\n      \"Rssi\": -71,\n      \"TxPower\": null,\n      \"Company\": \"Apple, Inc. (76)\",\n      \"UnixTimestamp\": 1744622997\n    },\n    {\n      \"HeaderLine\": \"\\u003E HCI Event: LE Meta Event (0x3e) plen 31  #2 [hci0] 2025-04-14 10:29:57.422163\",\n      \"RawDetails\": [\n        \"      LE Advertising Report (0x02)\",\n        \"        Num reports: 1\",\n        \"        Event type: Connectable undirected - ADV_IND (0x00)\",\n        \"        Address type: Random (0x01)\",\n        \"        Address: 5B:83:24:DE:80:6F (Resolvable)\",\n        \"        Data length: 19\",\n        \"        Flags: 0x1a\",\n        \"          LE General Discoverable Mode\",\n        \"          Simultaneous LE and BR/EDR (Controller)\",\n        \"          Simultaneous LE and BR/EDR (Host)\",\n        \"        TX power: 8 dBm\",\n        \"        Company: Apple, Inc. (76)\",\n        \"          Type: Unknown (16)\",\n        \"          Data: 7f1feaf80cbbf8\",\n        \"        RSSI: -82 dBm (0xae)\"\n      ],\n      \"EventType\": \"Connectable undirected - ADV_IND (0x00)\",\n      \"Address\": \"5B:83:24:DE:80:6F\",\n      \"Rssi\": -82,\n      \"TxPower\": 8,\n      \"Company\": \"Apple, Inc. (76)\",\n      \"UnixTimestamp\": 1744622997\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{publichost}}api/DetectedDevices/uploadMultiple",
+							"host": [
+								"{{publichost}}api"
+							],
+							"path": [
+								"DetectedDevices",
+								"uploadMultiple"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Localhost",
+			"item": [
+				{
+					"name": "RaspberryPi",
+					"item": [
+						{
+							"name": "Delete RaspberryPi",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/RaspberryPi/4",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"RaspberryPi",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update RaspberryPi",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"RaspberryPiID\": 3,\n    \"VenueID\": 1,\n    \"RaspX\": 12,\n    \"RaspY\": 10\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/RaspberryPi/3",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"RaspberryPi",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Raspberry Pi",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VenueID\": 1,\n    \"RaspX\": 0,\n    \"RaspY\": 0\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/RaspberryPi",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"RaspberryPi"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "RaspData",
+					"item": [
+						{
+							"name": "Multiple Rasp Data",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"MachineID\": 1,\n    \"Events\": [\n        {\n            \"HeaderLine\": \"\\u003E HCI Event: LE Meta Event (0x3e) plen 31  #1 [hci0] 2025-04-14 10:29:57.404711\",\n            \"RawDetails\": [\n                \"      LE Advertising Report (0x02)\",\n                \"        Num reports: 1\",\n                \"        Event type: Connectable undirected - ADV_IND (0x00)\",\n                \"        Address type: Random (0x01)\",\n                \"        Address: 47:C1:75:A8:6E:FB (Resolvable)\",\n                \"        Data length: 19\",\n                \"        Flags: 0x1a\",\n                \"          LE General Discoverable Mode\",\n                \"          Simultaneous LE and BR/EDR (Controller)\",\n                \"          Simultaneous LE and BR/EDR (Host)\",\n                \"        TX power: 7 dBm\",\n                \"        Company: Apple, Inc. (76)\",\n                \"          Type: Unknown (16)\",\n                \"          Data: 7d1f75b9392258\",\n                \"        RSSI: -79 dBm (0xb1)\"\n            ],\n            \"EventType\": \"Connectable undirected - ADV_IND (0x00)\",\n            \"Address\": \"47:C1:75:A8:6E:FB\",\n            \"Rssi\": -79,\n            \"TxPower\": 7,\n            \"Company\": \"Apple, Inc. (76)\",\n            \"UnixTimestamp\": 1744622997\n        },\n        {\n            \"HeaderLine\": \"@ MGMT Event: De.. (0x0012) plen 29  {0x0001} [hci0] 2025-04-14 10:29:57.404766\",\n            \"RawDetails\": [\n                \"        LE Address: 70:56:81:EE:F1:04 (Apple, Inc.)\",\n                \"        RSSI: -71 dBm (0xb9)\",\n                \"        Flags: 0x00000000\",\n                \"        Data length: 15\",\n                \"        Flags: 0x1a\",\n                \"          LE General Discoverable Mode\",\n                \"          Simultaneous LE and BR/EDR (Controller)\",\n                \"          Simultaneous LE and BR/EDR (Host)\",\n                \"        Company: Apple, Inc. (76)\",\n                \"          Type: Apple TV (9)\",\n                \"          Data: 023bc0a801f4\"\n            ],\n            \"EventType\": null,\n            \"Address\": \"70:56:81:EE:F1:04\",\n            \"Rssi\": -71,\n            \"TxPower\": null,\n            \"Company\": \"Apple, Inc. (76)\",\n            \"UnixTimestamp\": 1744622997\n        },\n        {\n            \"HeaderLine\": \"\\u003E HCI Event: LE Meta Event (0x3e) plen 31  #2 [hci0] 2025-04-14 10:29:57.422163\",\n            \"RawDetails\": [\n                \"      LE Advertising Report (0x02)\",\n                \"        Num reports: 1\",\n                \"        Event type: Connectable undirected - ADV_IND (0x00)\",\n                \"        Address type: Random (0x01)\",\n                \"        Address: 5B:83:24:DE:80:6F (Resolvable)\",\n                \"        Data length: 19\",\n                \"        Flags: 0x1a\",\n                \"          LE General Discoverable Mode\",\n                \"          Simultaneous LE and BR/EDR (Controller)\",\n                \"          Simultaneous LE and BR/EDR (Host)\",\n                \"        TX power: 8 dBm\",\n                \"        Company: Apple, Inc. (76)\",\n                \"          Type: Unknown (16)\",\n                \"          Data: 7f1feaf80cbbf8\",\n                \"        RSSI: -82 dBm (0xae)\"\n            ],\n            \"EventType\": \"Connectable undirected - ADV_IND (0x00)\",\n            \"Address\": \"5B:83:24:DE:80:6F\",\n            \"Rssi\": -82,\n            \"TxPower\": 8,\n            \"Company\": \"Apple, Inc. (76)\",\n            \"UnixTimestamp\": 1744622997\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/DetectedDevices/uploadMultiple",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"DetectedDevices",
+										"uploadMultiple"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Wipe all RaspData",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/RaspData",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"RaspData"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DetectedDevices",
+					"item": [
+						{
+							"name": "GetAtSpecificTimestamp",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"MachineID\": 3,\n    \"Events\": [\n        {\n            \"HeaderLine\": \"\\u003E HCI Event: LE Meta Event (0x3e) plen 31  #1 [hci0] 2025-04-14 10:29:57.404711\",\n            \"RawDetails\": [\n                \"      LE Advertising Report (0x02)\",\n                \"        Num reports: 1\",\n                \"        Event type: Connectable undirected - ADV_IND (0x00)\",\n                \"        Address type: Random (0x01)\",\n                \"        Address: 47:C1:75:A8:6E:FB (Resolvable)\",\n                \"        Data length: 19\",\n                \"        Flags: 0x1a\",\n                \"          LE General Discoverable Mode\",\n                \"          Simultaneous LE and BR/EDR (Controller)\",\n                \"          Simultaneous LE and BR/EDR (Host)\",\n                \"        TX power: 7 dBm\",\n                \"        Company: Apple, Inc. (76)\",\n                \"          Type: Unknown (16)\",\n                \"          Data: 7d1f75b9392258\",\n                \"        RSSI: -79 dBm (0xb1)\"\n            ],\n            \"EventType\": \"Connectable undirected - ADV_IND (0x00)\",\n            \"Address\": \"47:C1:75:A8:6E:FB\",\n            \"Rssi\": -79,\n            \"TxPower\": 7,\n            \"Company\": \"Apple, Inc. (76)\",\n            \"UnixTimestamp\": 1744622997\n        },\n        {\n            \"HeaderLine\": \"@ MGMT Event: De.. (0x0012) plen 29  {0x0001} [hci0] 2025-04-14 10:29:57.404766\",\n            \"RawDetails\": [\n                \"        LE Address: 70:56:81:EE:F1:04 (Apple, Inc.)\",\n                \"        RSSI: -71 dBm (0xb9)\",\n                \"        Flags: 0x00000000\",\n                \"        Data length: 15\",\n                \"        Flags: 0x1a\",\n                \"          LE General Discoverable Mode\",\n                \"          Simultaneous LE and BR/EDR (Controller)\",\n                \"          Simultaneous LE and BR/EDR (Host)\",\n                \"        Company: Apple, Inc. (76)\",\n                \"          Type: Apple TV (9)\",\n                \"          Data: 023bc0a801f4\"\n            ],\n            \"EventType\": null,\n            \"Address\": \"70:56:81:EE:F1:04\",\n            \"Rssi\": -71,\n            \"TxPower\": null,\n            \"Company\": \"Apple, Inc. (76)\",\n            \"UnixTimestamp\": 1744622997\n        },\n        {\n            \"HeaderLine\": \"\\u003E HCI Event: LE Meta Event (0x3e) plen 31  #2 [hci0] 2025-04-14 10:29:57.422163\",\n            \"RawDetails\": [\n                \"      LE Advertising Report (0x02)\",\n                \"        Num reports: 1\",\n                \"        Event type: Connectable undirected - ADV_IND (0x00)\",\n                \"        Address type: Random (0x01)\",\n                \"        Address: 5B:83:24:DE:80:6F (Resolvable)\",\n                \"        Data length: 19\",\n                \"        Flags: 0x1a\",\n                \"          LE General Discoverable Mode\",\n                \"          Simultaneous LE and BR/EDR (Controller)\",\n                \"          Simultaneous LE and BR/EDR (Host)\",\n                \"        TX power: 8 dBm\",\n                \"        Company: Apple, Inc. (76)\",\n                \"          Type: Unknown (16)\",\n                \"          Data: 7f1feaf80cbbf8\",\n                \"        RSSI: -82 dBm (0xae)\"\n            ],\n            \"EventType\": \"Connectable undirected - ADV_IND (0x00)\",\n            \"Address\": \"5B:83:24:DE:80:6F\",\n            \"Rssi\": -82,\n            \"TxPower\": 8,\n            \"Company\": \"Apple, Inc. (76)\",\n            \"UnixTimestamp\": 1744622997\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/DetectedDevices/getHeatmapAtSpecificTime/1745827635254",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"DetectedDevices",
+										"getHeatmapAtSpecificTime",
+										"1745827635254"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Venue",
+					"item": [
+						{
+							"name": "Create Venue",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VenueName\": \"BigCanteenAAU\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/Venue",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"Venue"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

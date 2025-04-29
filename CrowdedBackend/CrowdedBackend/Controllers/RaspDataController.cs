@@ -98,7 +98,7 @@ namespace CrowdedBackend.Controllers
 
             return NoContent();
         }
-        
+
         // DELETE: api/RaspData
         [HttpDelete]
         public async Task<IActionResult> WipeRaspData()

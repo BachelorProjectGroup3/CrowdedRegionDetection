@@ -11,14 +11,12 @@ namespace CrowdedBackend.Controllers
     [ApiController]
     public class DetectedDevicesController : ControllerBase
     {
+        private const long TimeInterval = 5 * 60 * 1000;
         private readonly MyDbContext _context;
-        private readonly ILogger<DetectedDevicesController> _logger;
         private DetectedDeviceHelper _detectedDevicesHelper;
-        
-        public DetectedDevicesController(MyDbContext context, ILogger<DetectedDevicesController> logger)
+        public DetectedDevicesController(MyDbContext context)
         {
             _context = context;
-            _logger = logger;
             _detectedDevicesHelper = new DetectedDeviceHelper(_context, new CircleUtils());
         }
 
@@ -29,34 +27,45 @@ namespace CrowdedBackend.Controllers
             return await _context.DetectedDevice.ToListAsync();
         }
 
-        // GET: api/DetectedDevices/getHeatmapAtSpecificTime/17891909
+        // GET: api/DetectedDevices/getHeatmapAtSpecificTime/1745562072611
         [HttpGet("getHeatmapAtSpecificTime/{timestamp}")]
-        public async Task<ActionResult<String>> GetDetectedDevice(int timestamp)
+        public async Task<ActionResult<String>> GetDetectedDevice(long timestamp)
         {
-            // TODO: We should find the closest timestamp to the given
+            // Don't record anything not in x min intervals
+            timestamp -= (timestamp % TimeInterval);
+
             var detectedDevices = await _context.DetectedDevice
-                .Where(d => d.timestamp.Equals(timestamp)).ToListAsync();
-   
+                .Where(d => d.Timestamp.Equals(timestamp))
+                .ToListAsync();
+
             if (detectedDevices.IsNullOrEmpty())
             {
-                return NotFound();
+                return Problem("Detected devices is null or empty", statusCode: 500);
             }
-            
+
             List<(float x, float y)> listOfDeviceLocations = [];
             foreach (var detectedDevice in detectedDevices)
             {
-                listOfDeviceLocations.Add(((float) detectedDevice.deviceX,(float) detectedDevice.deviceY));
+                listOfDeviceLocations.Add(((float)detectedDevice.DeviceX, (float)detectedDevice.DeviceY));
             }
 
-            Venue venue = detectedDevices[0].Venue;
+            Venue? venue = _context.Venue
+                .Where(d => d.VenueID.Equals(detectedDevices[0].VenueID))
+                .Include(v => v.RaspberryPis)
+                .FirstOrDefault();
+
+            if (venue == null)
+            {
+                return Problem("Venue in detected device is null", statusCode: 500);
+            }
 
             List<(float x, float y)> raspLocations = [];
 
             foreach (var rasp in venue.RaspberryPis)
             {
-                raspLocations.Add(((float) rasp.raspX, (float) rasp.raspY));
+                raspLocations.Add(((float)rasp.RaspX, (float)rasp.RaspY));
             }
-            
+
             String heatmapBase64Encoded = HeatmapGenerator.Generate(venue.VenueName, raspLocations, listOfDeviceLocations);
 
             return heatmapBase64Encoded;
@@ -67,7 +76,7 @@ namespace CrowdedBackend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDetectedDevice(int id, DetectedDevice detectedDevice)
         {
-            if (id != detectedDevice.detectedDeviceId)
+            if (id != detectedDevice.DetectedDeviceId)
             {
                 return BadRequest();
             }
@@ -100,8 +109,8 @@ namespace CrowdedBackend.Controllers
         {
             _context.DetectedDevice.Add(detectedDevice);
             await _context.SaveChangesAsync();
-        
-            return CreatedAtAction("GetDetectedDevice", new { id = detectedDevice.detectedDeviceId }, detectedDevice);
+
+            return CreatedAtAction("GetDetectedDevice", new { id = detectedDevice.DetectedDeviceId }, detectedDevice);
         }
 
         // POST: api/DetectedDevices/uploadMultiple
@@ -110,9 +119,11 @@ namespace CrowdedBackend.Controllers
         public async Task<ActionResult<DetectedDevice>> PostDetectedDevices(RaspOutputData raspOutputData)
         {
             long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            // Don't record anything not in x min intervals
+            now -= (now % TimeInterval);
 
-            await this._detectedDevicesHelper.handleRaspPostRequest(raspOutputData, now);
-            
+            await this._detectedDevicesHelper.HandleRaspPostRequest(raspOutputData, now);
+
             return CreatedAtAction("GetDetectedDevice", new { timestamp = now });
         }
 
@@ -134,7 +145,7 @@ namespace CrowdedBackend.Controllers
 
         private bool DetectedDeviceExists(int id)
         {
-            return _context.DetectedDevice.Any(e => e.detectedDeviceId == id);
+            return _context.DetectedDevice.Any(e => e.DetectedDeviceId == id);
         }
 
     }

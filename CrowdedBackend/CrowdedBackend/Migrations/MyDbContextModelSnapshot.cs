@@ -23,27 +23,27 @@ namespace CrowdedBackend.Migrations
 
             modelBuilder.Entity("CrowdedBackend.Models.DetectedDevice", b =>
                 {
-                    b.Property<int>("detectedDeviceId")
+                    b.Property<int>("DetectedDeviceId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("detectedDeviceId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("DetectedDeviceId"));
 
-                    b.Property<double>("deviceX")
+                    b.Property<double>("DeviceX")
                         .HasColumnType("double precision");
 
-                    b.Property<double>("deviceY")
+                    b.Property<double>("DeviceY")
                         .HasColumnType("double precision");
 
-                    b.Property<long>("timestamp")
+                    b.Property<long>("Timestamp")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("venueID")
+                    b.Property<int>("VenueID")
                         .HasColumnType("integer");
 
-                    b.HasKey("detectedDeviceId");
+                    b.HasKey("DetectedDeviceId");
 
-                    b.HasIndex("venueID");
+                    b.HasIndex("VenueID");
 
                     b.ToTable("DetectedDevice");
                 });
@@ -60,14 +60,14 @@ namespace CrowdedBackend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("RaspId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Rssi")
                         .HasColumnType("integer");
 
                     b.Property<long>("UnixTimestamp")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("raspId")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -82,14 +82,14 @@ namespace CrowdedBackend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RaspberryPiID"));
 
+                    b.Property<double>("RaspX")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("RaspY")
+                        .HasColumnType("double precision");
+
                     b.Property<int>("VenueID")
                         .HasColumnType("integer");
-
-                    b.Property<double>("raspX")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("raspY")
-                        .HasColumnType("double precision");
 
                     b.HasKey("RaspberryPiID");
 
@@ -120,7 +120,7 @@ namespace CrowdedBackend.Migrations
                 {
                     b.HasOne("CrowdedBackend.Models.Venue", "Venue")
                         .WithMany("DetectedDevices")
-                        .HasForeignKey("venueID")
+                        .HasForeignKey("VenueID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

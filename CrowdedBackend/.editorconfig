@@ -1,0 +1,10 @@
+root = true
+
+[*.cs]
+
+#### Naming Conventions ####
+dotnet_diagnostic.IDE1006.severity = warning   # e.g. method naming or field naming
+
+#### Unused Code ####
+dotnet_diagnostic.IDE0051.severity = warning   # Unused private member
+dotnet_diagnostic.IDE0052.severity = warning   # Assigned but never used
