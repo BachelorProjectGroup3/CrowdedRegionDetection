@@ -119,7 +119,6 @@ namespace CrowdedBackend.Controllers
         public async Task<ActionResult<DetectedDevice>> PostDetectedDevices(RaspOutputData raspOutputData)
         {
             long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-
             // Don't record anything not in x min intervals
             now -= (now % TimeInterval);
 

@@ -9,7 +9,6 @@ namespace CrowdedBackend.Helpers;
 
 public class DetectedDeviceHelper
 {
-
     private readonly MyDbContext _context;
     private CircleUtils _circleUtils;
 
@@ -18,13 +17,13 @@ public class DetectedDeviceHelper
         this._context = context;
         this._circleUtils = circleUtils;
     }
-
+  
     public async Task<RaspOutputData> HandleRaspPostRequest(RaspOutputData raspOutputData, long now)
     {
         try
         {
             var raspberryPi = await _context.RaspberryPi.FindAsync(raspOutputData.Id);
-
+          
             Console.WriteLine($"This is raspberryPi: {raspberryPi}");
 
             if (raspberryPi == null)
