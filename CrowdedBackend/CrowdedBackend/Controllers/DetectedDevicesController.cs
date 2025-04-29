@@ -122,6 +122,9 @@ namespace CrowdedBackend.Controllers
             // Don't record anything not in x min intervals
             now -= (now % TimeInterval);
 
+            // Don't record anything not in x min intervals
+            now -= (now % TimeInterval);
+
             await this._detectedDevicesHelper.HandleRaspPostRequest(raspOutputData, now);
 
             return CreatedAtAction("GetDetectedDevice", new { timestamp = now });
