@@ -9,6 +9,5 @@ public class MyDbContext : DbContext
     public DbSet<Venue> Venue { get; set; } = default!;
     public DbSet<RaspberryPi> RaspberryPi { get; set; } = default!;
     public DbSet<DetectedDevice> DetectedDevice { get; set; } = default!;
-
     public DbSet<RaspData> RaspData { get; set; } = default!;
 }
