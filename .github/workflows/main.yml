@@ -54,15 +54,10 @@ jobs:
     steps:
       - name: deploy
         run: |
-          SESSION_NAME="crowdedRegion"
-
-          screen -wipe "$SESSION_NAME"
-
-          if screen -list | grep -q "$SESSION_NAME"; then
-           echo "Killing existing screen session: $SESSION_NAME"
-           screen -S "$SESSION_NAME" -X quit
-           sleep 1
-          fi
-
-          echo "Starting new screen session: $SESSION_NAME"
-          screen -dmS "$SESSION_NAME" ~/runscript.sh
+          cd ~/CrowdedRegionControl/CrowdedBackend/CrowdedBackend
+          
+          echo "****Publish project****"
+          dotnet publish CrowdedBackend.csproj -c Release -o /home/ubuntu/project
+          
+          echo "****Run project****"
+          sudo systemctl restart crowdedbackend.service
