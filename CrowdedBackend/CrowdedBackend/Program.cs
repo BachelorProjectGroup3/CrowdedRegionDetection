@@ -1,3 +1,5 @@
+using CrowdedBackend.Helpers;
+using CrowdedBackend.Hubs;
 using CrowdedBackend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.HttpLogging;
@@ -32,6 +34,11 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi(); // Optional, for OpenAPI/Swagger in development
 }
+
+builder.Services.AddSignalR();
+
+app.MapHub<DetectedDeviceHub>("/hubs/detecteddevices");
+
 
 app.UseHttpsRedirection();
 

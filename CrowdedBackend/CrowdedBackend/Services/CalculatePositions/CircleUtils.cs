@@ -48,11 +48,11 @@ public class CircleUtils
                 throw new Exception("raspPoints values are invalid");
             }
 
-            foreach (var rasp1Data in raspOutputData[0].Events)
+            foreach (var rasp1Data in raspOutputData[0]!.Events)
             {
                 var macAddress = rasp1Data.MacAddress;
-                var rasp2Match = raspOutputData[1].Events.First(rasp2Data => rasp2Data.MacAddress == macAddress);
-                var rasp3Match = raspOutputData[2].Events.First(rasp3Data => rasp3Data.MacAddress == macAddress);
+                var rasp2Match = raspOutputData[1]!.Events.First(rasp2Data => rasp2Data.MacAddress == macAddress);
+                var rasp3Match = raspOutputData[2]!.Events.First(rasp3Data => rasp3Data.MacAddress == macAddress);
 
                 List<Circle> circles = new List<Circle>();
                 circles.Add(new Circle(this.raspPoints[0].X, this.raspPoints[0].Y, this.RSSIToLength(rasp1Data.Rssi)));
@@ -67,9 +67,8 @@ public class CircleUtils
         catch (Exception e)
         {
             Console.WriteLine(e);
+            throw;
         }
-
-        return null;
     }
 
     private double RSSIToLength(double rssi)
