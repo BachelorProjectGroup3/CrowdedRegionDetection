@@ -1,10 +1,8 @@
 using CrowdedBackend.Helpers;
-using CrowdedBackend.Hubs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CrowdedBackend.Models;
 using CrowdedBackend.Services.CalculatePositions;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CrowdedBackend.Controllers
@@ -16,11 +14,10 @@ namespace CrowdedBackend.Controllers
         private const long TimeInterval = 5 * 60 * 1000;
         private readonly MyDbContext _context;
         private DetectedDeviceHelper _detectedDevicesHelper;
-
-        public DetectedDevicesController(MyDbContext context, IHubContext<DetectedDeviceHub> hubContext)
+        public DetectedDevicesController(MyDbContext context)
         {
             _context = context;
-            _detectedDevicesHelper = new DetectedDeviceHelper(_context, new CircleUtils(), hubContext);
+            _detectedDevicesHelper = new DetectedDeviceHelper(_context, new CircleUtils());
         }
 
         // GET: api/DetectedDevices
