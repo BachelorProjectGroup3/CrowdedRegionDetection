@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 public class CircleUtils
 {
-    private const double RSSI_TO_LENGTH = 2;
+    private const double RSSI_TO_LENGTH = 400;
     private const double CIRCLE_EXTRA_SIZE = 2.0;
     private const double SMALL = 1e-10;
 
@@ -75,7 +75,11 @@ public class CircleUtils
     private double RSSIToLength(double rssi)
     {
         // TODO:Actually calculate
+<<<<<<< HEAD
         return -rssi / RSSI_TO_LENGTH + CIRCLE_EXTRA_SIZE;
+=======
+        return (RSSI_TO_LENGTH / (-rssi)) + CIRCLE_EXTRA_SIZE;
+>>>>>>> 2ede9fe25e2ace3d0f587a3c3688819d7ecd6cb3
     }
 
     private Point EstimatedPoint(List<Circle> circles)
