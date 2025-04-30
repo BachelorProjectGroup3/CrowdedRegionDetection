@@ -1,3 +1,4 @@
+using CrowdedBackend.Hubs;
 using CrowdedBackend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.HttpLogging;
@@ -23,7 +24,12 @@ builder.Services.AddHttpLogging(logging =>
     logging.ResponseHeaders.Add("MyCustomResponseHeader");
 });
 
+
+builder.Services.AddSignalR();
+
 var app = builder.Build();
+
+app.MapHub<DetectedDeviceHub>("/hubs/detecteddevices");
 
 app.UseHttpLogging();
 
