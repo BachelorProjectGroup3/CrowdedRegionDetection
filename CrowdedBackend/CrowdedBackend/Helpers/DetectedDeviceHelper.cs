@@ -5,6 +5,7 @@ using CrowdedBackend.Services.CalculatePositions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace CrowdedBackend.Helpers;
 
@@ -46,8 +47,13 @@ public class DetectedDeviceHelper
             // Test random MacAddress and see if there are 3??
             var foundDevices = _context.RaspData.Where(d => d.MacAddress == raspOutputData.Events[0].MacAddress);
 
+            Console.WriteLine("before");
+            
             if (foundDevices.Count() == 3)
             {
+                Console.WriteLine("herhehrehre");
+                // File.AppendAllText("log.txt", $"found 3 devices with MacAddress {raspOutputData.Events[0].MacAddress}. At {DateTime.UtcNow}\n");
+
                 var foundDeviceslist = await foundDevices.ToListAsync();
 
                 foreach (var device in foundDeviceslist)
@@ -70,7 +76,9 @@ public class DetectedDeviceHelper
                         throw new HttpRequestException(HttpRequestError.Unknown, message: "Failed to find raspberryPi in raw data table", statusCode: HttpStatusCode.InternalServerError);
                     }
 
-                    _circleUtils.AddData(new RaspOutputData { Events = eventList }, new Point(rasp.RaspX, rasp.RaspY));
+                    var intie = _circleUtils.AddData(new RaspOutputData { Events = eventList }, new Point(rasp.RaspX, rasp.RaspY));
+                    
+                    Console.WriteLine($"There are {intie} data thingies");
                 }
 
                 var points = _circleUtils.CalculatePosition();
@@ -78,7 +86,7 @@ public class DetectedDeviceHelper
                 {
                     _context.Add(new DetectedDevice { VenueID = raspberryPi.VenueID, DeviceX = point.X, DeviceY = point.Y, Timestamp = now });
                 }
-
+                
                 Console.WriteLine(_context);
 
                 await _context.SaveChangesAsync();
@@ -90,7 +98,6 @@ public class DetectedDeviceHelper
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
-            throw;
         }
 
         return raspOutputData;
