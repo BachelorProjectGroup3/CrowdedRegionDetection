@@ -17,14 +17,10 @@ public class HeatmapGenerator
         foreach (var position in peoplePositions)
         {
             positionList.Add((float.Round(position.x), float.Round(position.y)));
-            Console.WriteLine(position.x);
-            Console.WriteLine(position.y);
         }
-        Console.WriteLine(positionList.Count);
 
         string currentDirectory = Directory.GetCurrentDirectory() + "/Services/HeatmapScript/";
         var backgroundPath = Path.Combine(currentDirectory, venueName) + ".png";
-        Console.WriteLine(backgroundPath);
 
         var image = new SKBitmap(ImageSize, ImageSize);
         using var canvas = new SKCanvas(image);
