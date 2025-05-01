@@ -72,7 +72,6 @@ namespace CrowdedBackend.Controllers
         [HttpPost]
         public async Task<ActionResult<Venue>> PostVenue(Venue venue)
         {
-            Console.Out.WriteLine(venue);
             _context.Venue.Add(venue);
             await _context.SaveChangesAsync();
 
