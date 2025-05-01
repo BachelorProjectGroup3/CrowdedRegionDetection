@@ -33,8 +33,8 @@ class _CrowdedappState extends State<Crowdedapp> {
           currentIndex: _currentIndex,
           onTap: _onItemTapped,
           backgroundColor: Colors.blue.shade600,
-          selectedItemColor: Colors.black,
-          unselectedItemColor: Colors.white,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.black,
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
             BottomNavigationBarItem(icon: Icon(Icons.restaurant), label: "Canteen"),
