@@ -43,7 +43,7 @@ public class DetectedDeviceHelper
             }
 
             var uniqueIds = await _context.RaspData.Select(x => x.RaspId).Distinct().ToListAsync();
-            
+
             if (uniqueIds.Count == 3)
             {
                 var macsWithExactly3RaspIds = await _context.RaspData
@@ -52,7 +52,7 @@ public class DetectedDeviceHelper
                     .Where(g => g.Select(rd => rd.RaspId).Distinct().Count() == 3)
                     .Select(g => g.Key)
                     .ToListAsync();
-                
+
                 foreach (var id in uniqueIds)
                 {
                     var raspSpecificEvents = await _context.RaspData
@@ -65,10 +65,11 @@ public class DetectedDeviceHelper
 
                     foreach (var raspEvent in raspSpecificEvents)
                     {
-                        eventList.Add(new RaspEvent { 
-                            MacAddress = raspEvent.MacAddress, 
-                            Rssi = raspEvent.Rssi, 
-                            UnixTimestamp = now 
+                        eventList.Add(new RaspEvent
+                        {
+                            MacAddress = raspEvent.MacAddress,
+                            Rssi = raspEvent.Rssi,
+                            UnixTimestamp = now
                         });
                     }
 
