@@ -2,7 +2,6 @@ using CrowdedBackend.Hubs;
 using CrowdedBackend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.HttpLogging;
-using Microsoft.Extensions.Http.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
