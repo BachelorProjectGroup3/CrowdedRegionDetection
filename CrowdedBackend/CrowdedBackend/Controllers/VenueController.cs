@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CrowdedBackend.Models;
@@ -77,7 +72,6 @@ namespace CrowdedBackend.Controllers
         [HttpPost]
         public async Task<ActionResult<Venue>> PostVenue(Venue venue)
         {
-            Console.Out.WriteLine(venue);
             _context.Venue.Add(venue);
             await _context.SaveChangesAsync();
 

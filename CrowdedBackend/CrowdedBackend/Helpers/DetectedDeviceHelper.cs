@@ -4,6 +4,7 @@ using CrowdedBackend.Services.CalculatePositions;
 using Microsoft.AspNetCore.SignalR;
 using CrowdedBackend.Hubs;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace CrowdedBackend.Helpers;
 
@@ -26,8 +27,6 @@ public class DetectedDeviceHelper
         {
             var raspberryPi = await _context.RaspberryPi.FindAsync(raspOutputData.Id);
 
-            Console.WriteLine($"This is raspberryPi: {raspberryPi}");
-
             if (raspberryPi == null)
             {
                 throw new HttpRequestException(HttpRequestError.Unknown, message: "Raspberry Pi not found", statusCode: HttpStatusCode.InternalServerError);
@@ -44,27 +43,38 @@ public class DetectedDeviceHelper
                 });
             }
 
-            // Test random MacAddress and see if there are 3??
-            var foundDevices = _context.RaspData.Where(d => d.MacAddress == raspOutputData.Events[0].MacAddress);
+            var uniqueIds = await _context.RaspData.Select(x => x.RaspId).Distinct().ToListAsync();
 
-            if (foundDevices.Count() == 3)
+            if (uniqueIds.Count == 3)
             {
-                var foundDeviceslist = await foundDevices.ToListAsync();
+                var macsWithExactly3RaspIds = await _context.RaspData
+                    .Where(rd => uniqueIds.Contains(rd.RaspId))
+                    .GroupBy(rd => rd.MacAddress)
+                    .Where(g => g.Select(rd => rd.RaspId).Distinct().Count() == 3)
+                    .Select(g => g.Key)
+                    .ToListAsync();
 
-                foreach (var device in foundDeviceslist)
+                foreach (var id in uniqueIds)
                 {
                     var raspSpecificEvents = await _context.RaspData
-                        .Where(rasp => rasp.RaspId == device.RaspId)
+                        .Where(x => x.RaspId == id && macsWithExactly3RaspIds.Contains(x.MacAddress))
+                        .GroupBy(x => x.MacAddress)
+                        .Select(g => g.OrderByDescending(x => x.UnixTimestamp).First())
                         .ToListAsync();
 
                     var eventList = new List<RaspEvent>();
 
                     foreach (var raspEvent in raspSpecificEvents)
                     {
-                        eventList.Add(new RaspEvent { MacAddress = raspEvent.MacAddress, Rssi = raspEvent.Rssi, UnixTimestamp = now });
+                        eventList.Add(new RaspEvent
+                        {
+                            MacAddress = raspEvent.MacAddress,
+                            Rssi = raspEvent.Rssi,
+                            UnixTimestamp = now
+                        });
                     }
 
-                    var rasp = await _context.RaspberryPi.FindAsync(device.RaspId);
+                    var rasp = await _context.RaspberryPi.FindAsync(id);
 
                     if (rasp == null)
                     {
@@ -79,8 +89,6 @@ public class DetectedDeviceHelper
                 {
                     _context.Add(new DetectedDevice { VenueID = raspberryPi.VenueID, DeviceX = point.X, DeviceY = point.Y, Timestamp = now });
                 }
-
-                Console.WriteLine(_context);
 
                 await _context.SaveChangesAsync();
 
@@ -98,7 +106,6 @@ public class DetectedDeviceHelper
         catch (HttpRequestException e)
         {
             Console.WriteLine(e);
-            throw;
         }
 
         return raspOutputData;
