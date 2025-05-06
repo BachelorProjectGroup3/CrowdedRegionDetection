@@ -13,19 +13,19 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
     {
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory _factory;
-        
+
         public RaspDataIntegrationTests(CustomWebApplicationFactory factory)
         {
             _factory = factory;
             _client = _factory.CreateClient();
-            
+
         }
-        
+
         [Fact]
         public async Task PostRaspData_SavesRaspData_ReturnsCreated()
         {
             // Arrange: Create a Venue object to send to the API
-            var RaspData = new RaspData { MacAddress = "24:58:46:97:75:3F" , RaspId = 3, Rssi = -82, UnixTimestamp = 1746530400000};
+            var RaspData = new RaspData { MacAddress = "24:58:46:97:75:3F", RaspId = 3, Rssi = -82, UnixTimestamp = 1746530400000 };
 
             // Act: Send the POST request to the /api/Venue endpoint
             var response = await _client.PostAsJsonAsync("/api/RaspData", RaspData);
@@ -98,6 +98,6 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             Assert.Equal(HttpStatusCode.NotFound, getAfterDelete.StatusCode);
         }
         */
-        
+
     }
 }

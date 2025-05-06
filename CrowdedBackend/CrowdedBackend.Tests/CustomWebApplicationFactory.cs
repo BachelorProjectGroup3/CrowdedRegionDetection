@@ -27,7 +27,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<CrowdedBackend.
 
             services.AddDbContext<MyDbContext>(options =>
                 options.UseInMemoryDatabase(dbName));
-            
+
             // Build and initialize DB
             var sp = services.BuildServiceProvider();
             using var scope = sp.CreateScope();

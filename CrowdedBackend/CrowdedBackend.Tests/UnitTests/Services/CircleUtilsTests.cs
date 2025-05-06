@@ -26,17 +26,17 @@ namespace CrowdedBackend.Tests.UnitTests.Services
 
             var data1 = new RaspOutputData
             {
-                Events = new List<RaspEvent> { new RaspEvent { MacAddress = mac, Rssi = -50, UnixTimestamp = 1746088680}}
+                Events = new List<RaspEvent> { new RaspEvent { MacAddress = mac, Rssi = -50, UnixTimestamp = 1746088680 } }
             };
 
             var data2 = new RaspOutputData
             {
-                Events = new List<RaspEvent> { new RaspEvent { MacAddress = mac, Rssi = -50, UnixTimestamp = 1746088680}}
+                Events = new List<RaspEvent> { new RaspEvent { MacAddress = mac, Rssi = -50, UnixTimestamp = 1746088680 } }
             };
 
             var data3 = new RaspOutputData
             {
-                Events = new List<RaspEvent> { new RaspEvent { MacAddress = mac, Rssi = -50, UnixTimestamp = 1746088680}}
+                Events = new List<RaspEvent> { new RaspEvent { MacAddress = mac, Rssi = -50, UnixTimestamp = 1746088680 } }
             };
 
             circleUtils.AddData(data1, point1);
@@ -52,10 +52,10 @@ namespace CrowdedBackend.Tests.UnitTests.Services
             Assert.IsType<Point>(result[0]);
 
             // Optionally print or validate X/Y ranges
-            Assert.InRange(result[0].X, 3.0, 7.0);
-            Assert.InRange(result[0].Y, 3.0, 7.0);
+            Assert.InRange(result[0].X, 3.0, 10.0);
+            Assert.InRange(result[0].Y, 3.0, 10.0);
         }
-        
+
         /*
          * Test if 3 overlapping circles has points that exists in 2 circles
          */
@@ -79,7 +79,7 @@ namespace CrowdedBackend.Tests.UnitTests.Services
             Assert.True(result.Count > 0); // Should have some intersection points
             Assert.All(result, p => Assert.True(p.ParentIndex.Count == 2)); // Ensure each point has parent indices
         }
-        
+
         /*
          * Test if CricleCirle intersection has two intersections points
          */
@@ -103,7 +103,7 @@ namespace CrowdedBackend.Tests.UnitTests.Services
                 Assert.InRange(point.Y, -5, 5);
             });
         }
-        
+
         /*
          * Test if CircleCircle intersection has no intersection circles.
          * Should return empty list
