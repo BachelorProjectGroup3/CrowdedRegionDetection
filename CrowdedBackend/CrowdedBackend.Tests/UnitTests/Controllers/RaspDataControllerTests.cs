@@ -13,11 +13,10 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
     {
         private readonly MyDbContext _context;
         private readonly RaspDataController _controller;
-        private readonly CustomWebApplicationFactory _factory;
+
 
         public RaspDataControllerTests(CustomWebApplicationFactory factory)
         {
-            _factory = factory;
             // Use the factory to create a scope for the DB context
             var scope = factory.Services.CreateScope();
             _context = scope.ServiceProvider.GetRequiredService<MyDbContext>();
