@@ -16,18 +16,18 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
         private readonly VenueController _controller;
         private readonly CustomWebApplicationFactory _factory;
 
-      
+
         public VenueControllerTests(CustomWebApplicationFactory factory)
         {
             _factory = factory;
-            
+
             // Use the factory to create a scope for the DB context
             var scope = factory.Services.CreateScope();
             _context = scope.ServiceProvider.GetRequiredService<MyDbContext>();
             _controller = new VenueController(_context);
-            
+
         }
-        
+
         /*
          * Post venue
          */
@@ -52,7 +52,7 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
             Assert.Equal(venue.VenueID, returnedVenue.VenueID); // Check if the ID matches
             Assert.Equal(venue.VenueName, returnedVenue.VenueName); // Check if the name matches
         }
-        
+
         /*
          * Get Venue by name
          */
@@ -62,7 +62,7 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
             _context.Venue.Add(new Venue { VenueID = 2, VenueName = "Test Venue" });
             await _context.SaveChangesAsync();
 
-            
+
             // Act
             var result = await _controller.GetVenue(2);
 
@@ -71,7 +71,7 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
             var venue = Assert.IsType<Venue>(actionResult.Value);
             Assert.Equal("Test Venue", venue.VenueName);
         }
-        
+
         /*
          * Delete Venue by Id
          */
@@ -93,7 +93,7 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
             var deletedVenue = await _context.Venue.FindAsync(3);
             Assert.Null(deletedVenue); // Ensure the venue is no longer in the database
         }
-        
+
         [Fact]
         public async Task DeleteVenue_VenueNotFound_ReturnsNotFound()
         {

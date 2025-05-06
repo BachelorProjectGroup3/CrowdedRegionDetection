@@ -13,13 +13,13 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
     {
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory _factory;
-        
+
         public VenueIntegrationTests(CustomWebApplicationFactory factory)
         {
             _factory = factory;
             _client = _factory.CreateClient();
         }
-        
+
         [Fact]
         public async Task PostVenue_SavesVenue_ReturnsCreated()
         {
@@ -47,7 +47,7 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             var response = await _client.GetAsync($"/api/Venue/{id}");
             response.EnsureSuccessStatusCode();
             var returned = await response.Content.ReadFromJsonAsync<Venue>();
-            
+
             // Assert
             Assert.Equal(id, returned.VenueID);
             Assert.Equal("TestVenue", returned.VenueName);
@@ -66,7 +66,7 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
 
             // Act - Modify the venue
             originalVenue.VenueName = "Updated Venue Name";
-    
+
             var putResponse = await _client.PutAsJsonAsync($"/api/Venue/{id}", originalVenue);
             putResponse.EnsureSuccessStatusCode();
 
@@ -95,6 +95,6 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             var getAfterDelete = await _client.GetAsync($"/api/Venue/{venue.VenueID}");
             Assert.Equal(HttpStatusCode.NotFound, getAfterDelete.StatusCode);
         }
-        
+
     }
 }

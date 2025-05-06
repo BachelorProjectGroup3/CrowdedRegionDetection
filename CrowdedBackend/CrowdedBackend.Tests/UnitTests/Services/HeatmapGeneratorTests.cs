@@ -49,7 +49,7 @@ namespace CrowdedBackend.Tests.UnitTests.Services
             Assert.NotNull(density);
             Assert.True(density.Cast<double>().Any(val => val > 0));
         }
-        
+
         /*
          * This test ensures that even if the background image doesn't exist
          * (i.e., a file is missing), the Generate method still returns a valid image 
