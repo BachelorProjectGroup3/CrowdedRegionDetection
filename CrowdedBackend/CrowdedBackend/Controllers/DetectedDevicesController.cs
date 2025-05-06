@@ -11,7 +11,7 @@ namespace CrowdedBackend.Controllers
     [ApiController]
     public class DetectedDevicesController : ControllerBase
     {
-        private const long TimeInterval = 5 * 60 * 1000;
+        private const long TimeInterval = 30 * 1000;
         private readonly MyDbContext _context;
         private DetectedDeviceHelper _detectedDevicesHelper;
         public DetectedDevicesController(MyDbContext context)
