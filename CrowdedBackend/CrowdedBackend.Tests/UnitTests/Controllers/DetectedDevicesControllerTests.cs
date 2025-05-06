@@ -14,7 +14,7 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
     public class DetectedDevicesControllerTests : IClassFixture<CustomWebApplicationFactory>
     {
 
-        private const long TimeInterval = 5 * 60 * 1000;
+        /*private const long TimeInterval = 5 * 60 * 1000;
         private readonly MyDbContext _context;
         private readonly DetectedDevicesController _controller;
         private readonly CustomWebApplicationFactory _factory;
@@ -28,6 +28,6 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
             _context = scope.ServiceProvider.GetRequiredService<MyDbContext>();
             _controller = new DetectedDevicesController(_context);
 
-        }
+        }*/
     }
 }
