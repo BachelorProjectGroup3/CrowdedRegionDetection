@@ -1,3 +1,5 @@
+namespace CrowdedBackend.Controllers
+{
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CrowdedBackend.Models;
-
-namespace CrowdedBackend.Controllers
-{
     [Route("api/[controller]")]
     [ApiController]
     public class VenueController : ControllerBase
