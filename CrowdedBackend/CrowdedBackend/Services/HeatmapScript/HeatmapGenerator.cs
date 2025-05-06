@@ -1,21 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using MathNet.Numerics.Statistics;
 using SkiaSharp;
 
 
 public class HeatmapGenerator
 {
     private const int ImageSize = 800;
-    private const int GridResolution = 200;
+    private const int GridResolution = 500;
     private const float MapXMin = 0;
-    private const float MapXMax = 12;
+    private const float MapXMax = 170;
     private const float MapYMin = 0;
-    private const float MapYMax = 12;
+    private const float MapYMax = 120;
 
 
     public static String Generate(string venueName, List<(float x, float y)> raspberryPiPositions, List<(float x, float y)> peoplePositions)
@@ -24,14 +17,10 @@ public class HeatmapGenerator
         foreach (var position in peoplePositions)
         {
             positionList.Add((float.Round(position.x), float.Round(position.y)));
-            Console.WriteLine(position.x);
-            Console.WriteLine(position.y);
         }
-        Console.WriteLine(positionList.Count);
 
         string currentDirectory = Directory.GetCurrentDirectory() + "/Services/HeatmapScript/";
         var backgroundPath = Path.Combine(currentDirectory, venueName) + ".png";
-        Console.WriteLine(backgroundPath);
 
         var image = new SKBitmap(ImageSize, ImageSize);
         using var canvas = new SKCanvas(image);
@@ -118,7 +107,7 @@ public class HeatmapGenerator
 
     private static double[,] Compute2DKDE(List<(float x, float y)> points)
     {
-        double bandwidth = 0.8; // adjust for blur/sharpness
+        double bandwidth = 8; // adjust for blur/sharpness
         int N = points.Count;
 
         double[,] density = new double[GridResolution, GridResolution];

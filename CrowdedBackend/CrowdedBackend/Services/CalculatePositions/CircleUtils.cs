@@ -9,8 +9,8 @@ using Newtonsoft.Json;
 
 public class CircleUtils
 {
-    private const double RSSI_TO_LENGTH = 0.5;
-    private const double CIRCLE_EXTRA_SIZE = 2.0;
+    private const double RSSI_TO_LENGTH = 2;
+    private const double CIRCLE_EXTRA_SIZE = 20;
     private const double SMALL = 1e-10;
 
     private List<RaspOutputData?> raspOutputData = new List<RaspOutputData?>();
