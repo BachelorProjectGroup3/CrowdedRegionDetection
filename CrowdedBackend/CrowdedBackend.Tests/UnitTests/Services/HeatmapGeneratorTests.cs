@@ -47,7 +47,10 @@ namespace CrowdedBackend.Tests.UnitTests.Services
                 .Invoke(null, new object[] { points }) as double[,];
 
             Assert.NotNull(density);
-            Assert.True(density.Cast<double>().Any(val => val > 0));
+            Assert.Contains(
+                density.Cast<double>(),
+                val => val > 0
+            );
         }
 
         /*
