@@ -21,7 +21,7 @@ namespace CrowdedBackend.Controllers
         private readonly MyDbContext _context;
         private DetectedDeviceHelper _detectedDevicesHelper;
         private readonly IHubContext<DetectedDeviceHub> _hubContext;
-        
+
         public DetectedDevicesController(MyDbContext context, IHubContext<DetectedDeviceHub> hubContext)
         {
             _context = context;
@@ -149,7 +149,7 @@ namespace CrowdedBackend.Controllers
         {
             long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 <<<<<<< Updated upstream
-            
+
 =======
 >>>>>>> Stashed changes
             // Don't record anything not in x min intervals
