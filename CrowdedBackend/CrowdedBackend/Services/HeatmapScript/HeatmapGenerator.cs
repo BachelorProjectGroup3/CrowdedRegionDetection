@@ -3,7 +3,8 @@ using SkiaSharp;
 
 public class HeatmapGenerator
 {
-    private const int ImageSize = 800;
+    private const int ImageSizeX = 1200;
+    private const int ImageSizeY = 800;
     private const int GridResolution = 500;
     private const float MapXMin = 0;
     private const float MapXMax = 170;
@@ -22,7 +23,7 @@ public class HeatmapGenerator
         string currentDirectory = Directory.GetCurrentDirectory() + "/Services/HeatmapScript/";
         var backgroundPath = Path.Combine(currentDirectory, venueName) + ".png";
 
-        var image = new SKBitmap(ImageSize, ImageSize);
+        var image = new SKBitmap(ImageSizeX, ImageSizeY);
         using var canvas = new SKCanvas(image);
         canvas.Clear(SKColors.White);
 
@@ -31,7 +32,7 @@ public class HeatmapGenerator
         {
             using var bgStream = File.OpenRead(backgroundPath);
             var background = SKBitmap.Decode(bgStream);
-            var destRect = new SKRect(0, 0, ImageSize, ImageSize);
+            var destRect = new SKRect(0, 0, ImageSizeX, ImageSizeY);
             canvas.DrawBitmap(background, destRect);
         }
 
@@ -65,10 +66,10 @@ public class HeatmapGenerator
                 double value = density[i, j] / max;
                 SKColor color = GetHeatmapColor(value);
 
-                float x = i * ImageSize / (float)GridResolution;
-                float y = ImageSize - (j * ImageSize / (float)GridResolution); // invert Y
+                float x = i * ImageSizeX / (float)GridResolution;
+                float y = ImageSizeY - (j * ImageSizeY / (float)GridResolution); // invert Y
 
-                var rect = new SKRect(x, y, x + ImageSize / (float)GridResolution, y + ImageSize / (float)GridResolution);
+                var rect = new SKRect(x, y, x + ImageSizeX / (float)GridResolution, y + ImageSizeY / (float)GridResolution);
                 using var paint = new SKPaint { Color = color };
                 canvas.DrawRect(rect, paint);
             }
@@ -88,8 +89,8 @@ public class HeatmapGenerator
     {
         foreach (var (x, y) in points)
         {
-            float px = (x - MapXMin) / (MapXMax - MapXMin) * ImageSize;
-            float py = ImageSize - ((y - MapYMin) / (MapYMax - MapYMin) * ImageSize);
+            float px = (x - MapXMin) / (MapXMax - MapXMin) * ImageSizeX;
+            float py = ImageSizeY - ((y - MapYMin) / (MapYMax - MapYMin) * ImageSizeY);
 
             using var paint = new SKPaint
             {
