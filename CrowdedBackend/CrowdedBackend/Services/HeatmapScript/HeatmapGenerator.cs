@@ -4,11 +4,11 @@ using SkiaSharp;
 public class HeatmapGenerator
 {
     private const int ImageSize = 800;
-    private const int GridResolution = 200;
+    private const int GridResolution = 500;
     private const float MapXMin = 0;
-    private const float MapXMax = 12;
+    private const float MapXMax = 170;
     private const float MapYMin = 0;
-    private const float MapYMax = 12;
+    private const float MapYMax = 120;
 
 
     public static String Generate(string venueName, List<(float x, float y)> raspberryPiPositions, List<(float x, float y)> peoplePositions)
@@ -107,7 +107,7 @@ public class HeatmapGenerator
 
     private static double[,] Compute2DKDE(List<(float x, float y)> points)
     {
-        double bandwidth = 0.8; // adjust for blur/sharpness
+        double bandwidth = 8; // adjust for blur/sharpness
         int N = points.Count;
 
         double[,] density = new double[GridResolution, GridResolution];

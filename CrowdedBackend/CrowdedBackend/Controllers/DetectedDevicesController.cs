@@ -13,11 +13,7 @@ namespace CrowdedBackend.Controllers
     [ApiController]
     public class DetectedDevicesController : ControllerBase
     {
-<<<<<<< Updated upstream
-        private const long TimeInterval = 5 * 60 * 1000;
-=======
         private const long TimeInterval = 1 * 60 * 1000;
->>>>>>> Stashed changes
         private readonly MyDbContext _context;
         private DetectedDeviceHelper _detectedDevicesHelper;
         private readonly IHubContext<DetectedDeviceHub> _hubContext;
@@ -50,8 +46,6 @@ namespace CrowdedBackend.Controllers
             if (detectedDevices.IsNullOrEmpty())
             {
                 return Problem("Detected devices is null or empty", statusCode: 500);
-<<<<<<< Updated upstream
-=======
             }
 
             return await GetDetectedDeviceTimestampHelper(detectedDevices);
@@ -65,13 +59,17 @@ namespace CrowdedBackend.Controllers
                 .GroupBy(x => x.Timestamp)
                 .Select(g => g.OrderByDescending(x => x.Timestamp).First())
                 .ToListAsync();
-            
+
             if (detectedDevices.IsNullOrEmpty())
             {
                 return Problem("Detected devices is null or empty", statusCode: 500);
->>>>>>> Stashed changes
             }
 
+            return await GetDetectedDeviceTimestampHelper(detectedDevices);
+        }
+
+        private async Task<ActionResult<String>> GetDetectedDeviceTimestampHelper(List<DetectedDevice> detectedDevices)
+        {
             List<(float x, float y)> listOfDeviceLocations = [];
             foreach (var detectedDevice in detectedDevices)
             {
@@ -148,10 +146,7 @@ namespace CrowdedBackend.Controllers
         public async Task<ActionResult<DetectedDevice>> PostDetectedDevices(RaspOutputData raspOutputData)
         {
             long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
             // Don't record anything not in x min intervals
             now -= (now % TimeInterval);
 
