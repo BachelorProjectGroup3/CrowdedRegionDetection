@@ -42,10 +42,10 @@ namespace CrowdedBackend.Controllers
             {
                 return Problem("Detected devices is null or empty", statusCode: 500);
             }
-            
+
             return await GetDetectedDeviceTimestampHelper(detectedDevices);
         }
-        
+
         // GET: api/DetectedDevices/getLatestValidHeatmap
         [HttpGet("getLatestValidHeatmap")]
         public async Task<ActionResult<String>> GetLatestValidHeatmap()
@@ -54,7 +54,7 @@ namespace CrowdedBackend.Controllers
                 .GroupBy(x => x.Timestamp)
                 .Select(g => g.OrderByDescending(x => x.Timestamp).First())
                 .ToListAsync();
-            
+
             Console.WriteLine(detectedDevices.Count);
 
             if (detectedDevices.IsNullOrEmpty())
