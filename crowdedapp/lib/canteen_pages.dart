@@ -1,29 +1,134 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:signalr_core/signalr_core.dart' hide ConnectionState;
+
 final String backendUrl = dotenv.env['BackendURL'] ?? 'http://localhost:3000';
-class CanteenPage extends StatelessWidget {
+class CanteenPage extends StatefulWidget {
   final String title;
   const CanteenPage({super.key, required this.title});
-  
 
-Future<Image?> fetchHeatmapImage(int timestamp) async {
-  final response = await http.get(
-    Uri.parse('$backendUrl/api/DetectedDevices/getHeatmapAtSpecificTime/$timestamp'),
-  );
-  try {
-    if (response.statusCode == 200) {
-      final bytes = base64Decode(response.body);
-      return Image.memory(bytes, fit: BoxFit.contain);
-    } else {
-      throw Exception('Failed to load heatmap image');
-    }
-  } catch (e) {
-    print('Error fetching heatmap image: $e');
-  }
-  return null;
+  @override
+  State<CanteenPage> createState() => _CanteenPageState();
 }
+
+class _CanteenPageState extends State<CanteenPage> {
+  HubConnection? _hubConnection;
+  // Track when the image was last updated
+  DateTime? _lastUpdated;
+  final GlobalKey _futureBuilderKey = GlobalKey();
+  bool _needsRefresh = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initSignalR();
+  }
+
+  Future<void> _initSignalR() async {
+    try {
+      print('Initializing SignalR connection to: $backendUrl/hubs/detecteddevices');
+      if (_hubConnection == null || _hubConnection?.state == HubConnectionState.disconnected) {
+        _hubConnection = HubConnectionBuilder()
+            .withUrl(
+              '$backendUrl/hubs/detecteddevices',
+              HttpConnectionOptions(
+                logging: (level, message) => print('SignalR $level: $message'),
+                skipNegotiation: true,
+                transport: HttpTransportType.webSockets,
+              ),
+            )
+            .withAutomaticReconnect()
+            .build();
+
+        _hubConnection?.onreconnecting((error) {
+          print('SignalR reconnecting due to error: \\${error?.toString() ?? "Unknown error"}');
+        });
+        _hubConnection?.onreconnected((connectionId) {
+          print('SignalR reconnected with connectionId: $connectionId');
+        });
+        _hubConnection?.onclose((error) {
+          print('SignalR connection closed: \\${error?.toString() ?? "No error"}');
+          Future.delayed(Duration(seconds: 3), () {
+            if (mounted) {
+              _initSignalR();
+            }
+          });
+        });
+        _hubConnection?.on('NewDevicesDetected', (arguments) {
+          print('Received NewDevicesDetected: $arguments');
+          if (mounted) {
+            setState(() {
+              _needsRefresh = true;
+              _lastUpdated = DateTime.now();
+            });
+          }
+        });
+      }
+      if (_hubConnection?.state != HubConnectionState.connected) {
+        print('Starting connection to SignalR hub...');
+        await _hubConnection?.start();
+        print('Connected to SignalR hub successfully!');
+      }
+    } catch (e) {
+      print('Error initializing SignalR: $e');
+      if (mounted) {
+        Future.delayed(Duration(seconds: 5), () {
+          if (mounted && (_hubConnection == null ||
+              _hubConnection?.state == HubConnectionState.disconnected ||
+              _hubConnection?.state == HubConnectionState.disconnecting)) {
+            print('Attempting to reconnect after error...');
+            _initSignalR();
+          }
+        });
+      }
+    }
+  }
+
+  // Fetch the latest valid heatmap image from the new endpoint
+  Future<Image?> _fetchLatestHeatmapImage() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$backendUrl/api/DetectedDevices/getLatestValidHeatmap'),
+      );
+      if (response.statusCode == 200) {
+        final bytes = base64Decode(response.body);
+        // Update the last updated time
+        if (mounted) {
+          setState(() {
+            _lastUpdated = DateTime.now();
+          });
+        }
+        return Image.memory(bytes, fit: BoxFit.contain);
+      } else {
+        print('Error fetching heatmap: Status \\${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching heatmap: $e');
+      return null;
+    } finally {
+      if (_needsRefresh) {
+        setState(() {
+          _needsRefresh = false;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    try {
+      _hubConnection?.stop().catchError((error) {
+        print("Error stopping connection: $error");
+      });
+    } catch (e) {
+      print("Exception while stopping connection: $e");
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,40 +147,52 @@ Future<Image?> fetchHeatmapImage(int timestamp) async {
           children: [
             SizedBox(height: 50),
             Text(
-              title,
+              widget.title,
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             SizedBox(height: 10),
             Text(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vel dui diam. Nulla facilisi.",
+              "Here you are able to view the heatmao of the canteen. The Data in updated every 10 seconds.",
               style: TextStyle(fontSize: 16, color: Colors.white70),
             ),
             SizedBox(height: 150),
-            Text("Heatmap", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Heatmap", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
+                // Show last updated time if available
+                if (_lastUpdated != null)
+                  Text(
+                    "Last updated: \\${_lastUpdated!.toLocal().toString().substring(0, 19)}",
+                    style: TextStyle(fontSize: 14, color: Colors.white70),
+                  ),
+              ],
+            ),
             SizedBox(height: 0),
             Expanded(
               child: Center(
                 child: Container(
                   width: 500,
-                  height: 400,
+                  height: 500,
                   color: Colors.grey[300],
                   child: FutureBuilder<Image?>(
-                    future: fetchHeatmapImage(1745916000000), // Replace with your timestamp
+                    key: _needsRefresh ? UniqueKey() : _futureBuilderKey,
+                    future: _fetchLatestHeatmapImage(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
+                        return Center(child: Text('Error loading heatmap: \\${snapshot.error}', style: TextStyle(color: Colors.red)));
                       } else if (snapshot.hasData && snapshot.data != null) {
                         return snapshot.data!;
                       } else {
-                        return Icon(Icons.restaurant, size: 200, color: Colors.black54);
+                        return Icon(Icons.error_outline, size: 200, color: Colors.red);
                       }
                     },
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
