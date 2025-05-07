@@ -1,8 +1,10 @@
 using CrowdedBackend.Helpers;
+using CrowdedBackend.Hubs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CrowdedBackend.Models;
 using CrowdedBackend.Services.CalculatePositions;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CrowdedBackend.Controllers
@@ -11,13 +13,16 @@ namespace CrowdedBackend.Controllers
     [ApiController]
     public class DetectedDevicesController : ControllerBase
     {
-        private const long TimeInterval = 30 * 1000;
+        private const long TimeInterval = 1 * 60 * 1000;
         private readonly MyDbContext _context;
         private DetectedDeviceHelper _detectedDevicesHelper;
-        public DetectedDevicesController(MyDbContext context)
+        private readonly IHubContext<DetectedDeviceHub> _hubContext;
+
+        public DetectedDevicesController(MyDbContext context, IHubContext<DetectedDeviceHub> hubContext)
         {
             _context = context;
-            _detectedDevicesHelper = new DetectedDeviceHelper(_context, new CircleUtils());
+            _hubContext = hubContext;
+            _detectedDevicesHelper = new DetectedDeviceHelper(_context, new CircleUtils(), _hubContext);
         }
 
         // GET: api/DetectedDevices
@@ -54,8 +59,6 @@ namespace CrowdedBackend.Controllers
                 .GroupBy(x => x.Timestamp)
                 .Select(g => g.OrderByDescending(x => x.Timestamp).First())
                 .ToListAsync();
-
-            Console.WriteLine(detectedDevices.Count);
 
             if (detectedDevices.IsNullOrEmpty())
             {
@@ -143,8 +146,6 @@ namespace CrowdedBackend.Controllers
         public async Task<ActionResult<DetectedDevice>> PostDetectedDevices(RaspOutputData raspOutputData)
         {
             long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            // Don't record anything not in x min intervals
-            now -= (now % TimeInterval);
 
             // Don't record anything not in x min intervals
             now -= (now % TimeInterval);

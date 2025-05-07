@@ -1,9 +1,8 @@
-using System.Data;
 using System.Net;
 using CrowdedBackend.Models;
 using CrowdedBackend.Services.CalculatePositions;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using CrowdedBackend.Hubs;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 
@@ -13,11 +12,13 @@ public class DetectedDeviceHelper
 {
     private readonly MyDbContext _context;
     private CircleUtils _circleUtils;
+    private readonly IHubContext<DetectedDeviceHub> _hubContext;
 
-    public DetectedDeviceHelper(MyDbContext context, CircleUtils circleUtils)
+    public DetectedDeviceHelper(MyDbContext context, CircleUtils circleUtils, IHubContext<DetectedDeviceHub> hubContext)
     {
         this._context = context;
         this._circleUtils = circleUtils;
+        this._hubContext = hubContext;
     }
 
     public async Task<RaspOutputData> HandleRaspPostRequest(RaspOutputData raspOutputData, long now)
@@ -90,6 +91,13 @@ public class DetectedDeviceHelper
                 }
 
                 await _context.SaveChangesAsync();
+
+                // Notify clients
+                await _hubContext.Clients.All.SendAsync("NewDevicesDetected", new
+                {
+                    Devices = points.Select(p => new { X = p.X, Y = p.Y, Timestamp = now })
+                });
+
                 _circleUtils.WipeData();
                 await this.WipeRaspData();
             }
