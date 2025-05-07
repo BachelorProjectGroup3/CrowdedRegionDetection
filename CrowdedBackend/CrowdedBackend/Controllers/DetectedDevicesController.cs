@@ -13,7 +13,7 @@ namespace CrowdedBackend.Controllers
     [ApiController]
     public class DetectedDevicesController : ControllerBase
     {
-        private const long TimeInterval = 5 * 60 * 1000;
+        private const long TimeInterval = 30 * 1000;
         private readonly MyDbContext _context;
         private DetectedDeviceHelper _detectedDevicesHelper;
         private readonly IHubContext<DetectedDeviceHub> _hubContext;
@@ -48,6 +48,30 @@ namespace CrowdedBackend.Controllers
                 return Problem("Detected devices is null or empty", statusCode: 500);
             }
 
+            return await GetDetectedDeviceTimestampHelper(detectedDevices);
+        }
+
+        // GET: api/DetectedDevices/getLatestValidHeatmap
+        [HttpGet("getLatestValidHeatmap")]
+        public async Task<ActionResult<String>> GetLatestValidHeatmap()
+        {
+            var detectedDevices = await _context.DetectedDevice
+                .GroupBy(x => x.Timestamp)
+                .Select(g => g.OrderByDescending(x => x.Timestamp).First())
+                .ToListAsync();
+
+            Console.WriteLine(detectedDevices.Count);
+
+            if (detectedDevices.IsNullOrEmpty())
+            {
+                return Problem("Detected devices is null or empty", statusCode: 500);
+            }
+
+            return await GetDetectedDeviceTimestampHelper(detectedDevices);
+        }
+
+        private async Task<ActionResult<String>> GetDetectedDeviceTimestampHelper(List<DetectedDevice> detectedDevices)
+        {
             List<(float x, float y)> listOfDeviceLocations = [];
             foreach (var detectedDevice in detectedDevices)
             {
