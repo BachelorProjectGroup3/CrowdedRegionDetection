@@ -18,7 +18,6 @@ class _CanteenPageState extends State<CanteenPage> {
   HubConnection? _hubConnection;
   // Track when the image was last updated
   DateTime? _lastUpdated;
-  //final GlobalKey _futureBuilderKey = GlobalKey();
   bool _needsRefresh = false;
   Image? _lastImage;
 
@@ -158,7 +157,7 @@ class _CanteenPageState extends State<CanteenPage> {
             ),
             SizedBox(height: 10),
             Text(
-              "Here you are able to view the heatmao of the canteen. The Data in updated every 10 seconds.",
+              "Here you are able to view the heatmao of the canteen. The Data is updated every 10 seconds.",
               style: TextStyle(fontSize: 16, color: Colors.white70),
             ),
             SizedBox(height: 150),
