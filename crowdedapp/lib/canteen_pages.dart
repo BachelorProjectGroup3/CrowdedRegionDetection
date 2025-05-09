@@ -157,7 +157,7 @@ class _CanteenPageState extends State<CanteenPage> {
             ),
             SizedBox(height: 10),
             Text(
-              "Here you are able to view the heatmao of the canteen. The Data is updated every 10 seconds.",
+              "Here you are able to view the heatmap of the canteen. The Data is updated every 10 seconds.",
               style: TextStyle(fontSize: 16, color: Colors.white70),
             ),
             SizedBox(height: 150),
