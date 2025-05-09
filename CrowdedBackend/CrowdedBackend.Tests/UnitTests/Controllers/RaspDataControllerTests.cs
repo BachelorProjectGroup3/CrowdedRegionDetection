@@ -32,7 +32,6 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
             // Arrange
             var raspData = new RaspData
             {
-                Id = 1,
                 MacAddress = "79:1C:89:6B:EC:C7",
                 RaspId = 1,
                 Rssi = -90,
@@ -56,12 +55,12 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
         public async Task GetRaspData_ByName()
         {
 
-            _context.RaspData.Add(new RaspData { Id = 2, MacAddress = "79:1C:89:6B:EC:C7", RaspId = 1, Rssi = -90, UnixTimestamp = 1746033900000 });
+            _context.RaspData.Add(new RaspData { Id = 998, MacAddress = "79:1C:89:6B:EC:C7", RaspId = 1, Rssi = -90, UnixTimestamp = 1746033900000 });
             await _context.SaveChangesAsync();
 
 
             // Act
-            var result = await _controller.GetRaspData(2);
+            var result = await _controller.GetRaspData(998);
 
             // Assert
             var actionResult = Assert.IsType<ActionResult<RaspData>>(result);
@@ -75,11 +74,11 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
         [Fact]
         public async Task DeleteRaspData_ById()
         {
-            _context.RaspData.Add(new RaspData { Id = 3, MacAddress = "79:1C:89:6B:EC:C7", RaspId = 1, Rssi = -90, UnixTimestamp = 1746033900000 });
+            _context.RaspData.Add(new RaspData { Id = 999, MacAddress = "79:1C:89:6B:EC:C7", RaspId = 1, Rssi = -90, UnixTimestamp = 1746033900000 });
             await _context.SaveChangesAsync();
 
             // Act
-            var result = await _controller.DeleteRaspData(3); // Pass the ID of the venue to delete
+            var result = await _controller.DeleteRaspData(999); // Pass the ID of the venue to delete
 
             // Assert
             Assert.IsType<NoContentResult>(result);

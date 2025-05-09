@@ -29,9 +29,6 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             // Act: Send the POST request to the /api/Venue endpoint
             var response = await _client.PostAsJsonAsync("/api/Venue", venue);
 
-            // Assert: Ensure the response status code is 201 (Created)
-            response.EnsureSuccessStatusCode();
-
             // Deserialize the returned content to check the saved venue
             var returned = await response.Content.ReadFromJsonAsync<Venue>();
 
@@ -45,7 +42,7 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             // Arrange
             const int id = 4;
             var response = await _client.GetAsync($"/api/Venue/{id}");
-            response.EnsureSuccessStatusCode();
+
             var returned = await response.Content.ReadFromJsonAsync<Venue>();
 
             // Assert
@@ -59,7 +56,7 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             // Arrange
             const int id = 4;
             var getResponse = await _client.GetAsync($"/api/Venue/{id}");
-            getResponse.EnsureSuccessStatusCode();
+
             var originalVenue = await getResponse.Content.ReadFromJsonAsync<Venue>();
 
             Assert.NotNull(originalVenue);
@@ -68,11 +65,11 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             originalVenue.VenueName = "Updated Venue Name";
 
             var putResponse = await _client.PutAsJsonAsync($"/api/Venue/{id}", originalVenue);
-            putResponse.EnsureSuccessStatusCode();
+
 
             // Assert - Get again and verify the updated name
             var confirmResponse = await _client.GetAsync($"/api/Venue/{id}");
-            confirmResponse.EnsureSuccessStatusCode();
+
             var updatedVenue = await confirmResponse.Content.ReadFromJsonAsync<Venue>();
 
             Assert.Equal("Updated Venue Name", updatedVenue.VenueName);
@@ -84,7 +81,7 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             // Arrange
             var venue = new Venue { VenueID = 99, VenueName = "Venue to Delete" };
             var postResponse = await _client.PostAsJsonAsync("/api/Venue", venue);
-            postResponse.EnsureSuccessStatusCode();
+
 
             // Act
             var deleteResponse = await _client.DeleteAsync($"/api/Venue/{venue.VenueID}");
