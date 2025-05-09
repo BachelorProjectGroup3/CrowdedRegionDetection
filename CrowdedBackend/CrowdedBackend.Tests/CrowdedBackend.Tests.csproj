@@ -19,4 +19,10 @@
     <ProjectReference Include="..\CrowdedBackend\CrowdedBackend.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Data\raspOutputData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

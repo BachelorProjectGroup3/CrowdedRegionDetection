@@ -1,5 +1,6 @@
 using CrowdedBackend;
 using CrowdedBackend.Models;
+using CrowdedBackend.Services.CalculatePositions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<CrowdedBackend.
             {
                 services.Remove(descriptor);
             }
+
+            // Register CircleUtils in the DI container
+            services.AddScoped<CircleUtils>();
 
             // Unique DB name per test class
             var dbName = $"TestDb_{GetType().Name}";

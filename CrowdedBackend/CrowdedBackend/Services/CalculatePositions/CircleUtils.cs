@@ -47,7 +47,6 @@ public class CircleUtils
             {
                 throw new Exception("raspPoints values are invalid");
             }
-
             foreach (var rasp1Data in raspOutputData[0].Events)
             {
                 var macAddress = rasp1Data.MacAddress;
@@ -68,7 +67,6 @@ public class CircleUtils
         {
             Console.WriteLine(e);
         }
-
         return null;
     }
 
