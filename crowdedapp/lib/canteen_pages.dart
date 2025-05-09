@@ -1,11 +1,15 @@
 import 'dart:async';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:signalr_core/signalr_core.dart' hide ConnectionState;
 
+import 'package:signalr_core/signalr_core.dart' hide ConnectionState;
+
 final String backendUrl = dotenv.env['BackendURL'] ?? 'http://localhost:3000';
+class CanteenPage extends StatefulWidget {
 class CanteenPage extends StatefulWidget {
   final String title;
   const CanteenPage({super.key, required this.title});
@@ -152,6 +156,7 @@ class _CanteenPageState extends State<CanteenPage> {
           children: [
             SizedBox(height: 50),
             Text(
+              widget.title,
               widget.title,
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
             ),

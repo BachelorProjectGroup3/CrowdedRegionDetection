@@ -1,4 +1,5 @@
 using CrowdedBackend.Hubs;
+using CrowdedBackend.Hubs;
 using CrowdedBackend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.HttpLogging;
@@ -7,14 +8,26 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpClient();
 builder.Services.AddOpenApi();
 
-// Configure PostgreSQL database connection
-builder.Services.AddDbContext<MyDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Conditionally configure the database based on the environment
+var env = builder.Environment.EnvironmentName;
+if (env == "Testing")
+{
+    // Use InMemory database for testing
+    builder.Services.AddDbContext<MyDbContext>(options =>
+        options.UseInMemoryDatabase("TestDb"));
+}
+else
+{
+    // Use PostgreSQL in development or production environments
+    builder.Services.AddDbContext<MyDbContext>(options =>
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
 
 builder.Services.AddHttpLogging(logging =>
 {
@@ -26,17 +39,16 @@ builder.Services.AddHttpLogging(logging =>
 
 builder.Services.AddSignalR();
 
+
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 app.MapHub<DetectedDeviceHub>("/hubs/detecteddevices");
 
-app.UseHttpLogging();
+app.MapHub<DetectedDeviceHub>("/hubs/detecteddevices");
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi(); // Optional, for OpenAPI/Swagger in development
-}
+app.UseHttpLogging();
 
 app.UseHttpsRedirection();
 

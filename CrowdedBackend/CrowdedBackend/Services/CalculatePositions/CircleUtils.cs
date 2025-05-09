@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 public class CircleUtils
 {
-    private const double RSSI_TO_LENGTH = 2;
+    private const double RSSI_TO_LENGTH = 3;
     private const double CIRCLE_EXTRA_SIZE = 20;
     private const double SMALL = 1e-10;
 
@@ -47,7 +47,6 @@ public class CircleUtils
             {
                 throw new Exception("raspPoints values are invalid");
             }
-
             foreach (var rasp1Data in raspOutputData[0].Events)
             {
                 var macAddress = rasp1Data.MacAddress;
@@ -68,7 +67,6 @@ public class CircleUtils
         {
             Console.WriteLine(e);
         }
-
         return null;
     }
 
