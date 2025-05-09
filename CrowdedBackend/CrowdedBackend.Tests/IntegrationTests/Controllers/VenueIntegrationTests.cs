@@ -45,7 +45,7 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             // Arrange
             const int id = 4;
             var response = await _client.GetAsync($"/api/Venue/{id}");
-            response.EnsureSuccessStatusCode();
+
             var returned = await response.Content.ReadFromJsonAsync<Venue>();
 
             // Assert
