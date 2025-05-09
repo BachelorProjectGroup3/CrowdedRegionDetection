@@ -56,7 +56,7 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             // Arrange
             const int id = 4;
             var getResponse = await _client.GetAsync($"/api/Venue/{id}");
-            
+
             var originalVenue = await getResponse.Content.ReadFromJsonAsync<Venue>();
 
             Assert.NotNull(originalVenue);
@@ -65,11 +65,11 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             originalVenue.VenueName = "Updated Venue Name";
 
             var putResponse = await _client.PutAsJsonAsync($"/api/Venue/{id}", originalVenue);
-            
+
 
             // Assert - Get again and verify the updated name
             var confirmResponse = await _client.GetAsync($"/api/Venue/{id}");
-            
+
             var updatedVenue = await confirmResponse.Content.ReadFromJsonAsync<Venue>();
 
             Assert.Equal("Updated Venue Name", updatedVenue.VenueName);
@@ -81,7 +81,7 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             // Arrange
             var venue = new Venue { VenueID = 99, VenueName = "Venue to Delete" };
             var postResponse = await _client.PostAsJsonAsync("/api/Venue", venue);
-            
+
 
             // Act
             var deleteResponse = await _client.DeleteAsync($"/api/Venue/{venue.VenueID}");
