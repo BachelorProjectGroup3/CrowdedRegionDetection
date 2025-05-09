@@ -22,7 +22,7 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
             // Use the factory to create a scope for the DB context
             var scope = factory.Services.CreateScope();
             _context = scope.ServiceProvider.GetRequiredService<MyDbContext>();
-            _controller = new DetectedDevicesController(_context);
+            _controller = new DetectedDevicesController(_context, null);
         }
 
         [Fact]

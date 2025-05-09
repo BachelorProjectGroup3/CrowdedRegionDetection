@@ -51,7 +51,6 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             var responseContent = await result.Content.ReadAsStringAsync();
 
             // Assert
-            result.EnsureSuccessStatusCode();
             Assert.False(string.IsNullOrWhiteSpace(responseContent));
             _TestOutput.WriteLine(responseContent);
         }

@@ -27,7 +27,7 @@ namespace CrowdedBackend.Tests.IntegrationTests.Helpers
             var scope = factory.Services.CreateScope();
             _context = scope.ServiceProvider.GetRequiredService<MyDbContext>();
             _circleUtils = scope.ServiceProvider.GetRequiredService<CircleUtils>();  // Ensure CircleUtils is injected
-            _helper = new DetectedDeviceHelper(_context, _circleUtils);  // Ensure DetectedDeviceHelper is injected
+            _helper = new DetectedDeviceHelper(_context, _circleUtils, null);  // Ensure DetectedDeviceHelper is injected
         }
 
         [Fact]
