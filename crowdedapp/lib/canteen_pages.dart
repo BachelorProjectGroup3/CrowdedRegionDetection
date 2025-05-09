@@ -18,12 +18,13 @@ class _CanteenPageState extends State<CanteenPage> {
   HubConnection? _hubConnection;
   // Track when the image was last updated
   DateTime? _lastUpdated;
-  final GlobalKey _futureBuilderKey = GlobalKey();
   bool _needsRefresh = false;
+  Image? _lastImage;
 
   @override
   void initState() {
     super.initState();
+    _needsRefresh = true; // Ensure image loads on first open
     _initSignalR();
   }
 
@@ -36,8 +37,6 @@ class _CanteenPageState extends State<CanteenPage> {
               '$backendUrl/hubs/detecteddevices',
               HttpConnectionOptions(
                 logging: (level, message) => print('SignalR $level: $message'),
-                skipNegotiation: true,
-                transport: HttpTransportType.webSockets,
               ),
             )
             .withAutomaticReconnect()
@@ -57,13 +56,16 @@ class _CanteenPageState extends State<CanteenPage> {
             }
           });
         });
-        _hubConnection?.on('NewDevicesDetected', (arguments) {
-          print('Received NewDevicesDetected: $arguments');
+        _hubConnection?.on('NewDevicesDetected', (arguments) async {
+          print('SignalR: NewDevicesDetected event received!');
+          print('Jeg bliver ikke mounted');
           if (mounted) {
+            print('Jeg skal opdatere heatmap');
             setState(() {
               _needsRefresh = true;
-              _lastUpdated = DateTime.now();
             });
+            // Optionally, immediately trigger a fetch so the UI updates as soon as possible
+            await _fetchLatestHeatmapImage();
           }
         });
       }
@@ -89,19 +91,28 @@ class _CanteenPageState extends State<CanteenPage> {
 
   // Fetch the latest valid heatmap image from the new endpoint
   Future<Image?> _fetchLatestHeatmapImage() async {
+    // Add a short delay to ensure backend has generated the new heatmap
+    await Future.delayed(const Duration(milliseconds: 500));
     try {
       final response = await http.get(
         Uri.parse('$backendUrl/api/DetectedDevices/getLatestValidHeatmap'),
       );
       if (response.statusCode == 200) {
         final bytes = base64Decode(response.body);
-        // Update the last updated time
+        if (bytes.isEmpty) {
+          print('Error: Received empty image data');
+          return null;
+        }
+        final image = Image.memory(bytes, fit: BoxFit.contain);
         if (mounted) {
+          print('Jeg kommer her ind');
           setState(() {
+            _lastImage = image;
             _lastUpdated = DateTime.now();
+            _needsRefresh = false;
           });
         }
-        return Image.memory(bytes, fit: BoxFit.contain);
+        return image;
       } else {
         print('Error fetching heatmap: Status \\${response.statusCode}');
         return null;
@@ -109,12 +120,6 @@ class _CanteenPageState extends State<CanteenPage> {
     } catch (e) {
       print('Error fetching heatmap: $e');
       return null;
-    } finally {
-      if (_needsRefresh) {
-        setState(() {
-          _needsRefresh = false;
-        });
-      }
     }
   }
 
@@ -152,7 +157,7 @@ class _CanteenPageState extends State<CanteenPage> {
             ),
             SizedBox(height: 10),
             Text(
-              "Here you are able to view the heatmao of the canteen. The Data in updated every 10 seconds.",
+              "Here you are able to view the heatmap of the canteen. The Data is updated every 10 seconds.",
               style: TextStyle(fontSize: 16, color: Colors.white70),
             ),
             SizedBox(height: 150),
@@ -174,22 +179,24 @@ class _CanteenPageState extends State<CanteenPage> {
                 child: Container(
                   width: 500,
                   height: 500,
-                  color: Colors.grey[300],
-                  child: FutureBuilder<Image?>(
-                    key: _needsRefresh ? UniqueKey() : _futureBuilderKey,
-                    future: _fetchLatestHeatmapImage(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Error loading heatmap: \\${snapshot.error}', style: TextStyle(color: Colors.red)));
-                      } else if (snapshot.hasData && snapshot.data != null) {
-                        return snapshot.data!;
-                      } else {
-                        return Icon(Icons.error_outline, size: 200, color: Colors.red);
-                      }
-                    },
-                  ),
+                  color: Colors.transparent,
+                  child: _needsRefresh
+                      ? FutureBuilder<Image?>(
+                          key: UniqueKey(),
+                          future: _fetchLatestHeatmapImage(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Center(child: CircularProgressIndicator());
+                            } else if (snapshot.hasError) {
+                              return Center(child: Text('Error loading heatmap: \\${snapshot.error}', style: TextStyle(color: Colors.red)));
+                            } else if (snapshot.hasData && snapshot.data != null) {
+                              return snapshot.data!;
+                            } else {
+                              return Icon(Icons.error_outline, size: 200, color: Colors.red);
+                            }
+                          },
+                        )
+                      : (_lastImage ?? Icon(Icons.restaurant, size: 200, color: Colors.black54)),
                 ),
               ),
             ),
