@@ -36,11 +36,6 @@ namespace CrowdedBackend.Tests.IntegrationTests.Helpers
 
             // Arrange
             var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            // Adding Raspberry Pi devices to the database
-            _context.RaspberryPi.Add(new RaspberryPi { VenueID = 10, RaspX = 50, RaspY = 60 });
-            _context.RaspberryPi.Add(new RaspberryPi { VenueID = 10, RaspX = 90, RaspY = 100 });
-            _context.RaspberryPi.Add(new RaspberryPi { VenueID = 10, RaspX = 50, RaspY = 30 });
-            await _context.SaveChangesAsync(); // Don't forget to save changes!
 
             // Read the raspOutputData from the JSON file
             // Arrange

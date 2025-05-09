@@ -24,11 +24,11 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
         public async Task PostVenue_SavesVenue_ReturnsCreated()
         {
             // Arrange: Create a Venue object to send to the API
-            var venue = new Venue { VenueID = 4, VenueName = "TestVenue" };
+            var venue = new Venue { VenueID = 5, VenueName = "TestVenue" };
 
             // Act: Send the POST request to the /api/Venue endpoint
             var response = await _client.PostAsJsonAsync("/api/Venue", venue);
-
+            response.EnsureSuccessStatusCode();
             // Deserialize the returned content to check the saved venue
             var returned = await response.Content.ReadFromJsonAsync<Venue>();
 
@@ -42,12 +42,12 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             // Arrange
             const int id = 4;
             var response = await _client.GetAsync($"/api/Venue/{id}");
-
+            response.EnsureSuccessStatusCode();
             var returned = await response.Content.ReadFromJsonAsync<Venue>();
 
             // Assert
             Assert.Equal(id, returned.VenueID);
-            Assert.Equal("TestVenue", returned.VenueName);
+            Assert.Equal("Test Venue", returned.VenueName);
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             // Arrange
             const int id = 4;
             var getResponse = await _client.GetAsync($"/api/Venue/{id}");
-            
+            getResponse.EnsureSuccessStatusCode();
             var originalVenue = await getResponse.Content.ReadFromJsonAsync<Venue>();
 
             Assert.NotNull(originalVenue);
@@ -78,18 +78,13 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
         [Fact]
         public async Task DeleteVenue_ReturnsDeletedVenue_And_CannotBeFoundAfter()
         {
-            // Arrange
-            var venue = new Venue { VenueID = 99, VenueName = "Venue to Delete" };
-            var postResponse = await _client.PostAsJsonAsync("/api/Venue", venue);
-            postResponse.EnsureSuccessStatusCode();
-
             // Act
-            var deleteResponse = await _client.DeleteAsync($"/api/Venue/{venue.VenueID}");
+            var deleteResponse = await _client.DeleteAsync("/api/Venue/99");
 
             // Assert
             Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
 
-            var getAfterDelete = await _client.GetAsync($"/api/Venue/{venue.VenueID}");
+            var getAfterDelete = await _client.GetAsync("/api/Venue/99");
             Assert.Equal(HttpStatusCode.NotFound, getAfterDelete.StatusCode);
         }
 

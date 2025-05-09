@@ -14,7 +14,7 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory _factory;
         private readonly ITestOutputHelper _TestOutput;
-        private long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        
 
 
         public DetectedDevicesIntegrationTests(CustomWebApplicationFactory factory, ITestOutputHelper TestOutput)
@@ -26,39 +26,19 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
 
 
         [Fact]
-        public async Task GetHeatmapAtSpecificTime_returnBitstring()
+        public async Task GetLatestValidHeatmap_returnBitstring()
         {
-            // Arrange: Create a Venue object to send to the API
-            var venue = new Venue { VenueName = "TestVenue" };
-
-            // Act: Send the POST request to the /api/Venue endpoint
-            await _client.PostAsJsonAsync("/api/Venue", venue);
-
-
-            // Arrange
-            timestamp -= (timestamp % 30000); // same TimeInterval used in controller
-            var detectedDevice = new DetectedDevice
-            {
-                DeviceX = 50,
-                DeviceY = 100,
-                Timestamp = timestamp,
-                VenueID = venue.VenueID,
-            };
-
-            await _client.PostAsJsonAsync("/api/DetectedDevices", detectedDevice);
-
-            var result = await _client.GetAsync($"/api/DetectedDevices/getHeatmapAtSpecificTime/{timestamp}");
+            var result = await _client.GetAsync($"api/DetectedDevices/getLatestValidHeatmap");
             var responseContent = await result.Content.ReadAsStringAsync();
-
-            // Assert
+            result.EnsureSuccessStatusCode();
+            
             Assert.False(string.IsNullOrWhiteSpace(responseContent));
-            _TestOutput.WriteLine(responseContent);
         }
 
         [Fact]
         public async Task HandleRaspPostRequest_test()
         {
-            // Arrange
+            
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "raspOutputData.json");
 
             var raspOutputData = JsonSerializer.Deserialize<RaspOutputData>(
@@ -66,27 +46,16 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             var response = await _client.PostAsJsonAsync("/api/detectedDevices/uploadMultiple", raspOutputData);
+            response.EnsureSuccessStatusCode();
             _TestOutput.WriteLine($"response : {response}");
-
-
-            // Assert
+            
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
 
         [Fact]
         public async Task CanGetDetectedDevices()
         {
-            timestamp -= (timestamp % 30000); // same TimeInterval used in controller
-            var detectedDevice = new DetectedDevice
-            {
-                DeviceX = 50,
-                DeviceY = 70,
-                Timestamp = timestamp,
-                VenueID = 1
-            };
-
-            await _client.PostAsJsonAsync("/api/DetectedDevices", detectedDevice);
-
+            
             var response = await _client.GetAsync("/api/DetectedDevices");
             response.EnsureSuccessStatusCode();
 

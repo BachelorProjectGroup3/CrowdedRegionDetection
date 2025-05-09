@@ -19,7 +19,6 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
 
         public DetectedDevicesControllerTests(CustomWebApplicationFactory factory)
         {
-            // Use the factory to create a scope for the DB context
             var scope = factory.Services.CreateScope();
             _context = scope.ServiceProvider.GetRequiredService<MyDbContext>();
             _controller = new DetectedDevicesController(_context, null);
@@ -28,7 +27,6 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
         [Fact]
         public async Task PostDetectedDevices_ReturnsOkResult()
         {
-            // Arrange
             var detectedDevice = new DetectedDevice
             {
                 DetectedDeviceId = 1,
@@ -37,11 +35,9 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
                 DeviceY = 4,
                 Timestamp = 1745562072611
             };
-
-            // Act
+            
             var result = await _controller.PostDetectedDevice(detectedDevice);
-
-            // Assert
+            
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
             var returnedDetectedDevice = Assert.IsType<DetectedDevice>(createdAtActionResult.Value);
             Assert.Equal(detectedDevice.DetectedDeviceId, returnedDetectedDevice.DetectedDeviceId);

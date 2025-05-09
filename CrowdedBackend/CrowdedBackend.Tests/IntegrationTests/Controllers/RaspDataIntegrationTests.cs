@@ -24,19 +24,13 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
         [Fact]
         public async Task PostRaspData_SavesRaspData_ReturnsCreated()
         {
-            // Arrange: Create a Venue object to send to the API
             var RaspData = new RaspData { MacAddress = "24:58:46:97:75:3F", RaspId = 3, Rssi = -82, UnixTimestamp = 1746530400000 };
-
-            // Act: Send the POST request to the /api/Venue endpoint
+            
             var response = await _client.PostAsJsonAsync("/api/RaspData", RaspData);
-
-            // Assert: Ensure the response status code is 201 (Created)
             response.EnsureSuccessStatusCode();
-
-            // Deserialize the returned content to check the saved venue
+            
             var returned = await response.Content.ReadFromJsonAsync<RaspData>();
-
-            // Assert: Check if the returned venue is as expected
+            
             Assert.Equal("24:58:46:97:75:3F", returned.MacAddress);
         }
 

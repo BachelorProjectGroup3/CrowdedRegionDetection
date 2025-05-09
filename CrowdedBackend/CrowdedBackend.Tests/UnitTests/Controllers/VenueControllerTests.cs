@@ -16,11 +16,9 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
         private readonly VenueController _controller;
         public VenueControllerTests(CustomWebApplicationFactory factory)
         {
-            // Use the factory to create a scope for the DB context
             var scope = factory.Services.CreateScope();
             _context = scope.ServiceProvider.GetRequiredService<MyDbContext>();
             _controller = new VenueController(_context);
-
         }
 
         /*
@@ -30,17 +28,14 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
         [Fact]
         public async Task CreateVenue()
         {
-            // Arrange
             var venue = new Venue
             {
-                VenueID = 1,  // Assuming VenueID is the primary key
+                VenueID = 1,
                 VenueName = "Test Venue"
             };
-
-            // Act
+            
             var result = await _controller.PostVenue(venue);
-
-            // Assert
+            
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result); // Assert it returns CreatedAtActionResult
             var returnedVenue = Assert.IsType<Venue>(createdAtActionResult.Value); // Assert the value is a Venue object
 
@@ -54,14 +49,8 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
         [Fact]
         public async Task GetVenue_ByName()
         {
-            _context.Venue.Add(new Venue { VenueID = 2, VenueName = "Test Venue" });
-            await _context.SaveChangesAsync();
-
-
-            // Act
-            var result = await _controller.GetVenue(2);
-
-            // Assert
+            var result = await _controller.GetVenue(4);
+            
             var actionResult = Assert.IsType<ActionResult<Venue>>(result);
             var venue = Assert.IsType<Venue>(actionResult.Value);
             Assert.Equal("Test Venue", venue.VenueName);
@@ -73,29 +62,21 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
         [Fact]
         public async Task DeleteVenue_ById()
         {
-            // Arrange: Add a venue to the in-memory database
-            var venue = new Venue { VenueID = 3, VenueName = "Delete Venue" };
-            _context.Venue.Add(venue);
-            await _context.SaveChangesAsync(); // Save changes to the database
-
-            // Act: Call DeleteVenue method
-            var result = await _controller.DeleteVenue(3); // Pass the ID of the venue to delete
-
-            // Assert: Verify the result is NoContent (204)
+            
+            var result = await _controller.DeleteVenue(98);
+            
             Assert.IsType<NoContentResult>(result);
-
-            // Assert: Check that the venue was removed from the database
-            var deletedVenue = await _context.Venue.FindAsync(3);
-            Assert.Null(deletedVenue); // Ensure the venue is no longer in the database
+            
+            var deletedVenue = await _context.Venue.FindAsync(98);
+            Assert.Null(deletedVenue); 
         }
 
         [Fact]
         public async Task DeleteVenue_VenueNotFound_ReturnsNotFound()
         {
-            // Act: Try deleting a non-existing venue
-            var result = await _controller.DeleteVenue(999); // Use a non-existing ID
-
-            // Assert: Verify the result is NotFound (404)
+            
+            var result = await _controller.DeleteVenue(999);
+            
             Assert.IsType<NotFoundResult>(result);
         }
     }
