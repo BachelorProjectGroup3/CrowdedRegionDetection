@@ -1,5 +1,4 @@
 using CrowdedBackend.Hubs;
-using CrowdedBackend.Hubs;
 using CrowdedBackend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.HttpLogging;
