@@ -38,7 +38,12 @@ builder.Services.AddHttpLogging(logging =>
 
 builder.Services.AddSignalR();
 
+
+builder.Services.AddSignalR();
+
 var app = builder.Build();
+
+app.MapHub<DetectedDeviceHub>("/hubs/detecteddevices");
 
 app.MapHub<DetectedDeviceHub>("/hubs/detecteddevices");
 
