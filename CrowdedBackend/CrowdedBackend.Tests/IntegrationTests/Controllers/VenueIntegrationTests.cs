@@ -20,6 +20,13 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             _client = _factory.CreateClient();
         }
 
+        /// <summary>
+        ///     Testing our endpoint for posting a Venue
+        /// </summary>
+        /// <remark>
+        ///     Expected to pass by checking the response code
+        ///     Also if the returned name is the same as expected
+        /// </remark>
         [Fact]
         public async Task PostVenue_SavesVenue_ReturnsCreated()
         {
@@ -36,6 +43,13 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             Assert.Equal("TestVenue", returned.VenueName);
         }
 
+        /// <summary>
+        ///     testing get endpoint for getting a Venue
+        /// </summary>
+        /// <remark>
+        ///     Expected to pass by checking the response code
+        ///     Also if the returned name and Id is the same as expected
+        /// </remark>
         [Fact]
         public async Task GetVenue__ReturnsVenue()
         {
@@ -50,6 +64,14 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             Assert.Equal("Test Venue", returned.VenueName);
         }
 
+        /// <summary>
+        ///     Testing the put endpoint by first getting a Venue
+        ///     Then use the enpoint to update its name
+        /// </summary>
+        /// <remark>
+        ///     Expected to pass by checking the response code
+        ///     Also if the returned name is updated as we expected
+        /// </remark>
         [Fact]
         public async Task GetVenue_UpdateVenue_ReturnsUpdatedVenue()
         {
@@ -69,12 +91,19 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
 
             // Assert - Get again and verify the updated name
             var confirmResponse = await _client.GetAsync($"/api/Venue/{id}");
-            
+
             var updatedVenue = await confirmResponse.Content.ReadFromJsonAsync<Venue>();
 
             Assert.Equal("Updated Venue Name", updatedVenue.VenueName);
         }
 
+        /// <summary>
+        ///     testing delete endpoint
+        /// </summary>
+        /// <remark>
+        ///     Expected to pass by checking the response code
+        ///     Also if the Venue can not be found after deletion
+        /// </remark>
         [Fact]
         public async Task DeleteVenue_ReturnsDeletedVenue_And_CannotBeFoundAfter()
         {

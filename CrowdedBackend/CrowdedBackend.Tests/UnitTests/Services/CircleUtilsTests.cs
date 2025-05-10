@@ -9,9 +9,13 @@ namespace CrowdedBackend.Tests.UnitTests.Services
 {
     public class CircleUtilsTests
     {
-        /*
-         * Test that ensure three RSSI readings and their geometric logic produce a usable position
-         */
+        /// <summary>
+        ///     testing to calculatePosition by creating correct points
+        ///     Using the method in CircleUtils and verify its in range
+        /// </summary>
+        /// <remark>
+        ///      Using the method in CircleUtils and verify its in range
+        /// </remark>
         [Fact]
         public void CalculatePosition_WithValidData_ReturnsPosition()
         {
@@ -56,13 +60,17 @@ namespace CrowdedBackend.Tests.UnitTests.Services
             Assert.InRange(result[0].Y, 3.0, 10.0);
         }
 
-        /*
-         * Test if 3 overlapping circles has points that exists in 2 circles
-         */
+        /// <summary>
+        ///     Correctly finds all pairwise intersection points between three overlapping circles
+        /// </summary>
+        /// <remark>
+        ///     Confirms the result isn't null
+        ///     Confirms that some intersection points were found.
+        ///     Ensures every point knows which two circles created it (ParentIndex has 2 items).
+        /// </remark>
         [Fact]
         public void GetIntersectionPoints_WithThreeIntersectingCircles_ReturnsCorrectPoints()
         {
-            // Arrange
             var circleUtils = new CircleUtils();
             var circles = new List<Circle>
             {
@@ -71,30 +79,31 @@ namespace CrowdedBackend.Tests.UnitTests.Services
                 new (2, 4, 5)
             };
 
-            // Act
             var result = circleUtils.GetIntersectionPoints(circles);
 
-            // Assert
             Assert.NotNull(result);
-            Assert.True(result.Count > 0); // Should have some intersection points
-            Assert.All(result, p => Assert.True(p.ParentIndex.Count == 2)); // Ensure each point has parent indices
+            Assert.True(result.Count > 0);
+            Assert.All(result, p => Assert.True(p.ParentIndex.Count == 2));
         }
 
-        /*
-         * Test if CricleCirle intersection has two intersections points
-         */
+
+        /// <summary>
+        ///     Each intersection point’s X and Y coordinates are within reasonable bounds
+        ///     — roughly between the centers of the two circles.
+        /// </summary>
+        /// <remark>
+        ///     Two overlapping circles produce exactly two intersection points.
+        ///     The intersection points fall within expected coordinate ranges.
+        /// </remark>
         [Fact]
         public void CircleCircleIntersection_IntersectingCircles_ReturnsTwoPoints()
         {
-            // Arrange
             var circle1 = new Circle(0, 0, 5);
             var circle2 = new Circle(6, 0, 5);
             var utils = new CircleUtils();
 
-            // Act
             var result = utils.CircleCircleIntersection(circle1, circle2);
 
-            // Assert
             Assert.Equal(2, result.Count);
             Assert.All(result, point =>
             {
@@ -104,10 +113,13 @@ namespace CrowdedBackend.Tests.UnitTests.Services
             });
         }
 
-        /*
-         * Test if CircleCircle intersection has no intersection circles.
-         * Should return empty list
-         */
+
+        /// <summary>
+        ///     testing if there is no intersecting circles
+        /// </summary>
+        /// <remark>
+        ///     Should pass because the circles has no intersection
+        /// </remark>
         [Fact]
         public void CircleCircleIntersection_NonIntersectingCircles_ReturnsEmptyList()
         {

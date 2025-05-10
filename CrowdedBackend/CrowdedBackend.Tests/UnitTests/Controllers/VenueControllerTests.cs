@@ -21,10 +21,12 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
             _controller = new VenueController(_context);
         }
 
-        /*
-         * Post venue
-         */
-
+        /// <summary>
+        ///     Creating a new Venue
+        /// </summary>
+        /// <remark>
+        ///     Expected to pass because it should receive the same name and Id as expected
+        /// </remark>
         [Fact]
         public async Task CreateVenue()
         {
@@ -33,9 +35,9 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
                 VenueID = 1,
                 VenueName = "Test Venue"
             };
-            
+
             var result = await _controller.PostVenue(venue);
-            
+
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result); // Assert it returns CreatedAtActionResult
             var returnedVenue = Assert.IsType<Venue>(createdAtActionResult.Value); // Assert the value is a Venue object
 
@@ -43,40 +45,46 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
             Assert.Equal(venue.VenueName, returnedVenue.VenueName); // Check if the name matches
         }
 
-        /*
-         * Get Venue by name
-         */
+        /// <summary>
+        ///     Getting a venue by its name
+        /// </summary>
+        /// <remark>
+        ///     Expected to pass because it should receive the same name as expected
+        /// </remark>
         [Fact]
         public async Task GetVenue_ByName()
         {
             var result = await _controller.GetVenue(4);
-            
+
             var actionResult = Assert.IsType<ActionResult<Venue>>(result);
             var venue = Assert.IsType<Venue>(actionResult.Value);
             Assert.Equal("Test Venue", venue.VenueName);
         }
 
-        /*
-         * Delete Venue by Id
-         */
+        /// <summary>
+        ///     Deleting a venue by its ID and trying to find that venue
+        /// </summary>
+        /// <remark>
+        ///     Expected to return null because the venue should not exists
+        /// </remark>
         [Fact]
         public async Task DeleteVenue_ById()
         {
-            
+
             var result = await _controller.DeleteVenue(98);
-            
+
             Assert.IsType<NoContentResult>(result);
-            
+
             var deletedVenue = await _context.Venue.FindAsync(98);
-            Assert.Null(deletedVenue); 
+            Assert.Null(deletedVenue);
         }
 
         [Fact]
         public async Task DeleteVenue_VenueNotFound_ReturnsNotFound()
         {
-            
+
             var result = await _controller.DeleteVenue(999);
-            
+
             Assert.IsType<NotFoundResult>(result);
         }
     }

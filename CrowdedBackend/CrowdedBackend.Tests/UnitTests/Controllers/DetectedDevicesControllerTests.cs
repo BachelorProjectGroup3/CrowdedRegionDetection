@@ -24,6 +24,13 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
             _controller = new DetectedDevicesController(_context, null);
         }
 
+        /// <summary>
+        ///     Creating a detectedDevice 
+        /// </summary>
+        /// <remark>
+        ///     Expected to pass by compairng DeviceId and expected DeviceId
+        ///     Also checking its type
+        /// </remark>
         [Fact]
         public async Task PostDetectedDevices_ReturnsOkResult()
         {
@@ -35,9 +42,9 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
                 DeviceY = 4,
                 Timestamp = 1745562072611
             };
-            
+
             var result = await _controller.PostDetectedDevice(detectedDevice);
-            
+
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
             var returnedDetectedDevice = Assert.IsType<DetectedDevice>(createdAtActionResult.Value);
             Assert.Equal(detectedDevice.DetectedDeviceId, returnedDetectedDevice.DetectedDeviceId);

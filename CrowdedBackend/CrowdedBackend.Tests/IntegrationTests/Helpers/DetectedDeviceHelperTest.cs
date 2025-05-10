@@ -30,6 +30,13 @@ namespace CrowdedBackend.Tests.IntegrationTests.Helpers
             _helper = new DetectedDeviceHelper(_context, _circleUtils, null);  // Ensure DetectedDeviceHelper is injected
         }
 
+        /// <summary>
+        ///     Testing the DetectedDeviceHelper that sorts in our raspData and removes duplicates
+        ///     Using raspOutputData.json which is a dummy data file.
+        /// </summary>
+        /// <remark>
+        ///     Expected to pass by checking if the result is not null. The result is raspData
+        /// </remark>
         [Fact]
         public async Task HandleRaspPostRequest_test()
         {
