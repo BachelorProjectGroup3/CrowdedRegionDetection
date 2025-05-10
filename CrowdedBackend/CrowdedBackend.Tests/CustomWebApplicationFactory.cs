@@ -10,7 +10,6 @@ namespace CrowdedBackend.Tests;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<CrowdedBackend.Program>
 {
-    private long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
 
