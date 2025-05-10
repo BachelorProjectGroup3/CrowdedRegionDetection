@@ -16,15 +16,18 @@ namespace CrowdedBackend.Tests.UnitTests.Controllers
 
         public RaspberryPiControllerTests(CustomWebApplicationFactory factory)
         {
-            // Use the factory to create a scope for the DB context
             var scope = factory.Services.CreateScope();
             _context = scope.ServiceProvider.GetRequiredService<MyDbContext>();
             _controller = new RaspberryPiController(_context);
         }
 
-        /*
-         * Post RaspberryPi
-         */
+        /// <summary>
+        ///     Posting a RaspberryPi
+        /// </summary>
+        /// <remark>
+        ///     Expected to pass by creating a Raspberry and checking Id And raspX value
+        ///     Also checking if its has the correct type
+        /// </remark>
         [Fact]
         public async Task PostRaspberryPi()
         {
