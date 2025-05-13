@@ -55,9 +55,11 @@ namespace CrowdedBackend.Controllers
         [HttpGet("getLatestValidHeatmap")]
         public async Task<ActionResult<String>> GetLatestValidHeatmap()
         {
+            var latestTimestamp = await _context.DetectedDevice
+                .MaxAsync(x => x.Timestamp);
+
             var detectedDevices = await _context.DetectedDevice
-                .GroupBy(x => x.Timestamp)
-                .Select(g => g.OrderByDescending(x => x.Timestamp).First())
+                .Where(x => x.Timestamp == latestTimestamp)
                 .ToListAsync();
 
             if (detectedDevices.IsNullOrEmpty())
