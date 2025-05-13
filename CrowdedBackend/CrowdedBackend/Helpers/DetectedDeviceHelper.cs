@@ -95,7 +95,7 @@ public class DetectedDeviceHelper
                 // Notify clients
                 await _hubContext.Clients.All.SendAsync("NewDevicesDetected", new
                 {
-                    Devices = points.Count
+                    Devices = points.Select(p => new { X = p.X, Y = p.Y, Timestamp = now })
                 });
 
                 _circleUtils.WipeData();
