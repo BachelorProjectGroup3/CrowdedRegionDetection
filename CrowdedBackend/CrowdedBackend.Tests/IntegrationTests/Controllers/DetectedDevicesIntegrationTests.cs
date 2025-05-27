@@ -1,7 +1,10 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
+using CrowdedBackend.Controllers;
 using CrowdedBackend.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -14,14 +17,19 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory _factory;
         private readonly ITestOutputHelper _TestOutput;
+        private readonly MyDbContext _context;
+        private readonly DetectedDevicesController _controller;
 
 
 
         public DetectedDevicesIntegrationTests(CustomWebApplicationFactory factory, ITestOutputHelper TestOutput)
         {
+            var scope = factory.Services.CreateScope();
             _TestOutput = TestOutput;
             _factory = factory;
             _client = _factory.CreateClient();
+            _context = scope.ServiceProvider.GetRequiredService<MyDbContext>();
+            _controller = new DetectedDevicesController(_context, null);
         }
 
         /// <summary>
@@ -63,6 +71,18 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             _TestOutput.WriteLine($"response : {response}");
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            
+            var detectedDevices = await _context.DetectedDevice
+                .OrderByDescending(d => d.Timestamp)
+                .Take(3)
+                .ToListAsync();
+
+            Assert.NotEmpty(detectedDevices);
+            Assert.All(detectedDevices, d =>
+            {
+                Assert.True(d.DeviceX > 0 && d.DeviceY > 0);
+                _TestOutput.WriteLine($"Detected device at X:{d.DeviceX}, Y:{d.DeviceY}");
+            });
         }
 
         /// <summary>
