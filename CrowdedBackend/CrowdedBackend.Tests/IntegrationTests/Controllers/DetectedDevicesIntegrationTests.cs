@@ -71,7 +71,7 @@ namespace CrowdedBackend.Tests.IntegrationTests.Controllers
             _TestOutput.WriteLine($"response : {response}");
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-            
+
             var detectedDevices = await _context.DetectedDevice
                 .OrderByDescending(d => d.Timestamp)
                 .Take(3)
